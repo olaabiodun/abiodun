@@ -10,3 +10,4 @@ Flask-Migrate==4.0.5
 Flask-Mail==0.9.1
 Flask-Admin==1.6.1
 python-dotenv==1.0.0
+gunicorn
