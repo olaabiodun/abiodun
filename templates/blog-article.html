@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - Olanipekun Abiodun{% endblock %}
+{% block description %}{{ post.excerpt or (post.content[:150] | striptags) }}{% endblock %}
+
+{% block content %}
+<!-- Section - Blog Article Start -->
+<div class="mxd-section padding-pre-title">
+    <div class="mxd-container grid-container">
+        <div class="mxd-article-area loading-wrap">
+            <!-- Article Container Start -->
+            <div class="mxd-article-container mxd-grid-item no-margin">
+                <!-- Article Start -->
+                <article class="mxd-article">
+                    <!-- Article Headline Start -->
+                    <div class="mxd-article__headline">
+                        <div class="mxd-article__meta">
+                            <div class="mxd-article__breadcrumbs loading__item">
+                                <span><a href="{{ url_for('index') }}">Home</a></span>
+                                <span><a href="{{ url_for('blog') }}">Insights</a></span>
+                                <span class="current-item">{{ post.title }}</span>
+                            </div>
+                            <div class="mxd-article__data loading__item">
+                                <span class="meta-date">{{ post.created_at.strftime('%B %d, %Y') if post.created_at else '' }}</span>
+                            </div>
+                        </div>
+                        <div class="mxd-article__title loading__item">
+                            <h1 class="h1-small">{{ post.title }}</h1>
+                        </div>
+                        <div class="mxd-article__tags loading__item">
+                            {% for tag in post.get_tags_list() %}
+                            <span class="tag tag-default tag-outline tag-link-outline">
+                                <a href="#">{{ tag }}</a>
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Article Headline End -->
+
+                    <!-- Article Thumb Start -->
+                    <div class="mxd-article__thumb loading__fade">
+                        <img src="{{ url_for('static', filename=post.featured_image or 'img/blog/article/1920x1280_tm-01.webp') }}" alt="{{ post.title }}">
+                    </div>
+                    <!-- Article Thumb End -->
+
+                    <!-- Article Content Start -->
+                    <div class="mxd-article__content">
+                        <div class="mxd-article__block">
+                            <p class="t-large mxd-article__excerpt">{{ post.excerpt }}</p>
+                            {{ post.content | safe }}
+                        </div>
+                    </div>
+                    <!-- Article Content End -->
+                </article>
+                <!-- Article End -->
+
+                <!-- Article Author Start -->
+                <div class="mxd-article-author">
+                    <div class="mxd-article-author__data">
+                        <a class="mxd-article-author__avatar" href="#">
+                            <img src="{{ url_for('static', filename='img/avatars/300x300_ava-01.webp') }}" alt="Author Avatar">
+                        </a>
+                        <div class="mxd-article-author__info">
+                            <h5 class="mxd-article-author__name">
+                                <a href="#">Olanipekun Abiodun</a>
+                                <small class="mxd-article-author__position">Software Developer</small>
+                            </h5>
+                            <div class="mxd-article-author__socials">
+                                <span class="tag tag-default tag-opposite tag-link-opposite"><a href="https://www.linkedin.com/" target="_blank">LinkedIn</a></span>
+                                <span class="tag tag-default tag-opposite tag-link-opposite"><a href="https://github.com/" target="_blank">GitHub</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mxd-article-author__quote">
+                        <p>Passionate about creating innovative web solutions and sharing knowledge with the developer community.</p>
+                    </div>
+                </div>
+                <!-- Article Author End -->
+
+                <!-- Article Navigation Start -->
+                <div class="mxd-article-navigation">
+                    <div class="container-fluid p-0">
+                        <div class="row g-0">
+                            <div class="col-6 mxd-article-navigation__navitem left">
+                                {% if prev_post %}
+                                <a class="btn btn-line-small btn-muted anim-no-delay slide-left" href="{{ url_for('blog_article', slug=prev_post.slug) }}">
+                                    <i class="ph ph-arrow-left"></i>
+                                    <span class="btn-caption">Prev</span>
+                                </a>
+                                <a class="mxd-article-navigation__link" href="{{ url_for('blog_article', slug=prev_post.slug) }}">
+                                    <span>{{ prev_post.title }}</span>
+                                </a>
+                                {% endif %}
+                            </div>
+                            <div class="col-6 mxd-article-navigation__navitem right">
+                                {% if next_post %}
+                                <a class="btn btn-line-small btn-muted anim-no-delay slide-right" href="{{ url_for('blog_article', slug=next_post.slug) }}">
+                                    <span class="btn-caption">Next</span>
+                                    <i class="ph ph-arrow-right"></i>
+                                </a>
+                                <a class="mxd-article-navigation__link" href="{{ url_for('blog_article', slug=next_post.slug) }}">
+                                    <span>{{ next_post.title }}</span>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Article Navigation End -->
+            </div>
+            <!-- Article Container End -->
+        </div>
+    </div>
+</div>
+<!-- Section - Blog Article End -->
+{% endblock %}

@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio - Olanipekun Abiodun{% endblock %}
+{% block description %}Explore my portfolio of web development projects, mobile apps, and digital solutions. See how I bring ideas to life with modern technologies.{% endblock %}
+
+{% block content %}
+<!-- Section - Inner Page Headline Start -->
+<div class="mxd-section mxd-section-inner-headline padding-headline-pre-stack">
+  <div class="mxd-container grid-container">
+    <div class="mxd-block loading-wrap">
+      <div class="container-fluid px-0">
+        <div class="row gx-0">
+          <div class="col-12 col-xl-2 mxd-grid-item no-margin">
+            <div class="mxd-block__name name-inner-headline loading__item">
+              <p class="mxd-point-subtitle">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2
+                    c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4
+                    c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2
+                    c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6
+                    c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4
+                    c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6
+                    c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"/>
+                </svg>
+                <span>Works</span>
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-xl-10 mxd-grid-item no-margin">
+            <div class="mxd-block__content">
+              <div class="mxd-block__inner-headline loading__item">
+                <h1 class="inner-headline__title headline-img-after headline-img-03">Where bold ideas take shape</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Section - Inner Page Headline End -->
+
+<!-- Section - Projects Stacking Cards Start -->
+<div class="mxd-section padding-stacked-section">
+  <div class="mxd-container grid-container">
+    <div class="mxd-block mxd-grid-item no-margin">
+      <div class="content__block loading__fade">
+        <div class="stack-wrapper">
+          <div class="stack-offset"></div>
+          <div class="projects-stack">
+            <div class="stack-item">
+              <a class="mxd-projects-stack__inner justify-between" href="#0">
+                <div class="mxd-projects-stack__image">
+                  <img src="{{ url_for('static', filename='img/works/preview/1920x1080_prv-04.webp') }}" alt="Project Preview">
+                </div>
+                <div class="mxd-projects-stack__tags">
+                  <span class="tag tag-default tag-outline-permanent">Brand</span>
+                  <span class="tag tag-default tag-outline-permanent">Illustrations</span>
+                  <span class="tag tag-default tag-outline-permanent">Web</span>
+                </div>
+                <div class="mxd-projects-stack__title no-margin">
+                  <h2 class="permanent-light">Studio template</h2>
+                </div>
+              </a>
+            </div>
+            <div class="stack-item">
+              <a class="mxd-projects-stack__inner justify-between" href="#0">
+                <div class="mxd-projects-stack__image">
+                  <img src="{{ url_for('static', filename='img/works/preview/1920x1080_prv-01.webp') }}" alt="Project Preview">
+                </div>
+                <div class="mxd-projects-stack__tags">
+                  <span class="tag tag-default tag-outline-permanent">Sora</span>
+                  <span class="tag tag-default tag-outline-permanent">AI</span>
+                  <span class="tag tag-default tag-outline-permanent">Editorial</span>
+                </div>
+                <div class="mxd-projects-stack__title no-margin">
+                  <h2 class="permanent-light">AI Experiments</h2>
+                </div>
+              </a>
+            </div>
+            <div class="stack-item">
+              <a class="mxd-projects-stack__inner justify-between" href="#0">
+                <div class="mxd-projects-stack__image">
+                  <img src="{{ url_for('static', filename='img/works/preview/1920x1080_prv-05.webp') }}" alt="Project Preview">
+                </div>
+                <div class="mxd-projects-stack__tags">
+                  <span class="tag tag-default tag-outline-permanent">Design</span>
+                  <span class="tag tag-default tag-outline-permanent">UI/UX</span>
+                  <span class="tag tag-default tag-outline-permanent">Android</span>
+                </div>
+                <div class="mxd-projects-stack__title no-margin">
+                  <h2 class="permanent-light">Mobile app design</h2>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Section - Projects Stacking Cards End -->
+
+<!-- Section - Projects List Start -->
+<div class="mxd-section overflow-hidden padding-grid-pre-mtext">
+  <div class="mxd-container grid-container">
+    <div class="mxd-block">
+      <div class="mxd-section-title">
+        <div class="container-fluid p-0">
+          <div class="row g-0">
+            <div class="col-12 col-xl-6 mxd-grid-item no-margin">
+              <div class="mxd-section-title__hrtitle">
+                <h2 class="reveal-type anim-uni-in-up">Portfolio archive</h2>
+              </div>
+            </div>
+            <div class="col-12 col-xl-2 mxd-grid-item no-margin"></div>
+            <div class="col-12 col-xl-4 mxd-grid-item no-margin">
+              <div class="mxd-section-title__hrcontrols pre-title anim-uni-in-up">
+                <a class="btn btn-anim btn-default btn-outline slide-right-down" href="#testimonials">
+                  <span class="btn-caption">Clients Approve</span>
+                  <i class="ph-bold ph-arrow-down-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mxd-block">
+      <div class="mxd-projects-list hover-reveal">
+        <a class="mxd-projects-list__item hover-reveal__item" href="#0">
+          <div class="mxd-projects-list__border anim-uni-in-up"></div>
+          <div class="hover-reveal__content hover-reveal-280x340">
+            <img class="hover-reveal__image" src="{{ url_for('static', filename='img/works/preview/600x730_prv-01.webp') }}" alt="Project Preview">
+          </div>
+          <div class="mxd-projects-list__inner">
+            <div class="container-fluid px-0">
+              <div class="row gx-0">
+                <div class="col-12 col-xl-8 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__title anim-uni-in-up">
+                    <div class="mxd-projects-list__icon"><i class="ph ph-arrow-right"></i></div>
+                    <p>E-commerce website</p>
+                  </div>
+                  <div class="mxd-projects-list__image anim-uni-in-up">
+                    <img src="{{ url_for('static', filename='img/works/preview/1200x800_prv-01.webp') }}" alt="Project Preview">
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__tagslist">
+                    <ul>
+                      <li class="anim-uni-in-up"><p class="t-small">UI/UX design</p></li>
+                      <li class="anim-uni-in-up"><p class="t-small">Development</p></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__date anim-uni-in-up"><p class="t-small">2025</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mxd-projects-list__border anim-uni-in-up"></div>
+        </a>
+
+        <a class="mxd-projects-list__item hover-reveal__item" href="#0">
+          <div class="mxd-projects-list__border anim-uni-in-up"></div>
+          <div class="hover-reveal__content hover-reveal-280x340">
+            <img class="hover-reveal__image" src="{{ url_for('static', filename='img/works/preview/600x730_prv-02.webp') }}" alt="Project Preview">
+          </div>
+          <div class="mxd-projects-list__inner">
+            <div class="container-fluid px-0">
+              <div class="row gx-0">
+                <div class="col-12 col-xl-8 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__title anim-uni-in-up">
+                    <div class="mxd-projects-list__icon"><i class="ph ph-arrow-right"></i></div>
+                    <p>NFT project branding</p>
+                  </div>
+                  <div class="mxd-projects-list__image anim-uni-in-up">
+                    <img src="{{ url_for('static', filename='img/works/preview/1200x800_prv-02.webp') }}" alt="Project Preview">
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__tagslist">
+                    <ul>
+                      <li class="anim-uni-in-up"><p class="t-small">Brand identity</p></li>
+                      <li class="anim-uni-in-up"><p class="t-small">Style guides</p></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__date anim-uni-in-up"><p class="t-small">2025</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mxd-projects-list__border anim-uni-in-up"></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Section - Projects List End -->
+
+<!-- Dynamic Projects List (database-driven) Start -->
+<div class="mxd-section padding-grid-pre-mtext">
+  <div class="mxd-container grid-container">
+    <div class="mxd-block">
+      <div class="mxd-projects-list hover-reveal">
+        {% for project in projects %}
+        <a class="mxd-projects-list__item hover-reveal__item" href="{{ url_for('project_details', project_id=project.id) }}">
+          <div class="mxd-projects-list__border anim-uni-in-up"></div>
+          <div class="hover-reveal__content hover-reveal-280x340">
+            <img class="hover-reveal__image" src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}" alt="{{ project.title }}">
+          </div>
+          <div class="mxd-projects-list__inner">
+            <div class="container-fluid px-0">
+              <div class="row gx-0">
+                <div class="col-12 col-xl-8 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__title anim-uni-in-up">
+                    <div class="mxd-projects-list__icon"><i class="ph ph-arrow-right"></i></div>
+                    <p>{{ project.title }}</p>
+                  </div>
+                  <div class="mxd-projects-list__image anim-uni-in-up">
+                    <img src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}" alt="{{ project.title }}">
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__tagslist">
+                    <ul>
+                      {% set tags = project.get_tags_list() %}
+                      {% if tags %}
+                      {% for tag in tags %}
+                      <li class="anim-uni-in-up"><p class="t-small">{{ tag }}</p></li>
+                      {% endfor %}
+                      {% else %}
+                      <li class="anim-uni-in-up"><p class="t-small">{{ project.category|title }}</p></li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">
+                  <div class="mxd-projects-list__date anim-uni-in-up">
+                    <p class="t-small">{{ project.created_at.year if project.created_at else '' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mxd-projects-list__border anim-uni-in-up"></div>
+        </a>
+        {% endfor %}
+
+        {% if not projects %}
+        <div class="mxd-projects-list__item">
+          <div class="mxd-projects-list__inner">
+            <div class="mxd-works__empty">
+              <h3>No projects found</h3>
+              <p>Try adjusting your search or filter criteria.</p>
+              <a href="{{ url_for('works') }}" class="btn btn-anim btn-default btn-outline">
+                <span class="btn-caption">View All Projects</span>
+                <i class="ph-bold ph-arrow-up-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Dynamic Projects List (database-driven) End -->
+{% endblock %}

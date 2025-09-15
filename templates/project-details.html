@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} - {{ super() }}{% endblock %}
+
+{% block description %}{{ project.description }}{% endblock %}
+
+{% block content %}
+    <!-- Page Content Start -->
+    <main id="mxd-page-content" class="mxd-page-content inner-page-content">
+
+      <!-- Section - Inner Page Headline Start -->
+      <div class="mxd-section mxd-section-inner-headline padding-default">
+        <div class="mxd-container grid-container">
+        
+          <!-- Block - Inner Page Headline Start -->
+          <div class="mxd-block loading-wrap">
+            <div class="container-fluid px-0">
+              <div class="row gx-0">
+
+                <!-- Inner Headline Name Start -->
+                <div class="col-12 col-xl-2 mxd-grid-item no-margin">
+                  <div class="mxd-block__name name-project-link loading__fade">
+                    <a class="btn btn-anim btn-line-small btn-muted slide-right-up" href="{{ url_for('works') }}">
+                      <span class="btn-caption">Project Page</span>
+                      <i class="ph ph-arrow-up-right"></i>
+                    </a>
+                  </div>
+                </div>
+                <!-- Inner Headline Name Start -->
+
+                <!-- Inner Headline Content Start -->
+                <div class="col-12 col-xl-10 mxd-grid-item no-margin">
+                  <div class="mxd-block__content">
+                    <div class="mxd-block__inner-headline loading__item">
+                      <h1 class="inner-headline__title">{{ project.title }}</h1>
+                    </div>
+                  </div>
+                </div>
+                <!-- Inner Headline Content End -->
+
+                <!-- Inner Headline Aside Start -->
+                <div class="col-12"></div>
+                <!-- Inner Headline Aside End -->
+
+              </div>
+              <div class="row g-0">
+                <div class="col-12 col-xl-2"></div>
+
+                <!-- Inner Headline Paragraph & Data Start -->
+                <div class="col-12 col-xl-6 mxd-grid-item no-margin">
+
+                  <div class="inner-headline__paragraph loading__item">
+                    <p>{{ project.excerpt }}</p>
+                  </div>
+
+                  <div class="inner-headline__data">
+                    <div class="mxd-data-list">
+                      <div class="container-fluid p-0">
+                        <div class="row g-0">
+                          <div class="col-12 col-md-6 col-xl-5 mxd-data-list__column loading__item">
+                            <div class="mxd-data-list__item">
+                              <p class="mxd-data-list__name">Client</p>
+                              <p class="mxd-data-list__content">{{ project.client }}</p>
+                            </div>
+                            <div class="mxd-data-list__item">
+                              <p class="mxd-data-list__name">Services</p>
+                              <p class="mxd-data-list__content">{{ project.services }}</p>
+                            </div>
+                          </div>
+                          <div class="col-12 col-md-6 col-xl-5 mxd-data-list__column loading__item">
+                            <div class="mxd-data-list__item">
+                              <p class="mxd-data-list__name">Industries</p>
+                              <p class="mxd-data-list__content">{{ project.industry }}</p>
+                            </div>
+                            <div class="mxd-data-list__item">
+                              <p class="mxd-data-list__name">Date</p>
+                              <p class="mxd-data-list__content">{{ project.created_at.strftime('%B %Y') }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <!-- Inner Headline Paragraph & Data End -->
+
+                <!-- Inner Headline Tags Start -->
+                <div class="col-12 col-xl-4 mxd-grid-item no-margin">
+                  <div class="inner-headline__tags loading__fade">
+                    {% for tag in project.tags.split(',') %}
+                      <span class="tag tag-default tag-outline-medium">{{ tag.strip() }}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <!-- Inner Headline Tags End -->
+
+            </div>
+          </div>
+          <!-- Block - Inner Page Headline End -->
+
+        </div>
+      </div>
+      <!-- Section - Inner Page Headline End -->
+
+      <!-- Section - Parallax Divider Start -->
+      <div class="mxd-section">
+        <div class="mxd-container">
+          <div class="mxd-divider loading__fade">
+            <div class="mxd-divider__image prj-details-img-01 parallax-img"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Section - Parallax Divider End -->
+
+      <!-- Section - Project Details Start -->
+      <div class="mxd-section mxd-project overflow-hidden">
+        <div class="mxd-container grid-container">
+        
+          <!-- Project Block - Challenge Description with H2 Title and Paragraph Start -->
+          <div class="mxd-project__block pre-grid">
+            <div class="container-fluid px-0">
+              <div class="row gx-0">
+                <div class="col-12 col-xl-5 mxd-grid-item no-margin">
+                  <div class="mxd-project__subtitle">
+                    <h2 class="reveal-type anim-uni-in-up">Challenge</h2>
+                  </div>
+                </div>
+                <div class="col-12 col-xl-6 mxd-grid-item no-margin">
+                  <div class="mxd-project__content">
+                    <div class="mxd-project__paragraph">
+                      <p class="t-large t-bright anim-uni-in-up">{{ project.challenge_summary }}</p>
+                      <p class="anim-uni-in-up">{{ project.challenge_description }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Project Block - Challenge Description with H2 Title and Paragraph End -->
+
+          <!-- Project Block - Images Cards Start -->
+          <div class="mxd-project__block no-margin">
+            <div class="mxd-project-cards">
+              <div class="container-fluid px-0">
+                <div class="row gx-0">
+                  {% for image in project.images %}
+                    <div class="col-12 col-xl-{{ image.size }} mxd-project-cards__item mxd-grid-item anim-uni-scale-in-{{ image.animation }}">
+                      <div class="mxd-project-cards__inner align-{{ image.alignment }} bg-{{ image.background }} radius-m">
+                        <img src="{{ url_for('static', filename=image.path) }}" alt="{{ image.alt }}">
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Project Block - Images Cards End -->
+
+          <!-- Project Block - Solution Description with H2 Title and Paragraph Start -->
+          <div class="mxd-project__block">
+            <div class="container-fluid px-0">
+              <div class="row gx-0">
+                <div class="col-12 col-xl-5 mxd-grid-item no-margin">
+                  <div class="mxd-project__subtitle">
+                    <h2 class="reveal-type anim-uni-in-up">Solution</h2>
+                  </div>
+                </div> 
+                <div class="col-12 col-xl-6 mxd-grid-item no-margin">
+                  <div class="mxd-project__content">
+                    <div class="mxd-project__paragraph medium-text">
+                      <p class="anim-uni-in-up">{{ project.solution_summary }}</p>
+                      <p class="anim-uni-in-up">{{ project.solution_description }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Project Block - Solution Description with H2 Title and Paragraph End -->
+
+          <!-- Project Block - Parallax Fullwidth Image Start -->
+          <div class="mxd-project__block mxd-grid-item no-margin">
+            <div class="mxd-divider">
+              <div class="mxd-divider__image prj-details-img-02 parallax-img"></div>
+            </div>
+          </div>
+          <!-- Project Block - Parallax Fullwidth Image End -->
+
+          <!-- Project Block - Client's feedback Description with H2 Title and Paragraph Start -->
+          {% if project.client_feedback %}
+          <div class="mxd-project__block">
+            <div class="container-fluid px-0">
+              <div class="row gx-0">
+                <div class="col-12 col-xl-5 mxd-grid-item no-margin">
+                  <div class="mxd-project__subtitle">
+                    <h2 class="reveal-type anim-uni-in-up">Client's<br>feedback</h2>
+                  </div>
+                </div>
+                <div class="col-12 col-xl-6 mxd-grid-item no-margin">
+                  <div class="mxd-project__content">
+                    <div class="mxd-project__paragraph medium-text">
+                      <p class="anim-uni-in-up">{{ project.client_feedback }}</p>
+                      <div class="mxd-project__client anim-uni-in-up">
+                        <h5 class="anim-uni-in-up">{{ project.client_name }}</h5>
+                        <p class="t-small anim-uni-in-up">{{ project.client_role }} in
+                          <a class="" href="{{ project.client_company_url }}">{{ project.client_company }}</a>
+                        </p>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <!-- Project Block - Client's feedback Description with H2 Title and Paragraph End -->
+
+          <!-- Project Block - Project Link Start -->
+          <div class="mxd-project__block no-margin">
+            <div class="mxd-project__nav">
+              <div class="mxd-project__divider anim-uni-in-up"></div>
+              <div class="container-fluid p-0">
+                <div class="row g-0">
+                  <div class="col-6 mxd-project__navitem left mxd-grid-item no-margin anim-uni-in-up">
+                    <a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-left" href="{{ url_for('project_details', slug=prev_project.slug) if prev_project else '#' }}">
+                      <i class="ph ph-arrow-left"></i>
+                      <span class="btn-caption">Prev</span>
+                    </a>
+                    <a class="mxd-project__link anim-uni-in-up" href="{{ url_for('project_details', slug=prev_project.slug) if prev_project else '#' }}">
+                      <span>{{ prev_project.title if prev_project else 'No previous project' }}</span>
+                    </a>
+                  </div>
+                  <div class="col-6 mxd-project__navitem right mxd-grid-item no-margin anim-uni-in-up">
+                    <a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-right" href="{{ url_for('project_details', slug=next_project.slug) if next_project else '#' }}">
+                      <span class="btn-caption">Next</span>
+                      <i class="ph ph-arrow-right"></i>
+                    </a>
+                    <a class="mxd-project__link  anim-uni-in-up" href="{{ url_for('project_details', slug=next_project.slug) if next_project else '#' }}">
+                      <span>{{ next_project.title if next_project else 'No next project' }}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Project Block - Project Link End -->
+
+        </div>
+      </div>
+      <!-- Section - Project Details End -->
+ 
+      <!-- Section - CTA Start -->
+      <div class="mxd-section overflow-hidden">
+        <div class="mxd-container">
+
+          <!-- Block - CTA Start -->
+          <div class="mxd-block">
+            <div class="mxd-promo">
+              <div class="mxd-promo__inner anim-zoom-out-container">
+                <!-- background -->
+                <div class="mxd-promo__bg"></div>
+                <!-- caption -->
+                <div class="mxd-promo__content">
+                  <p class="mxd-promo__title anim-uni-in-up">
+                    <span class="mxd-promo__icon">
+                      <img src="{{ url_for('static', filename='img/icons/300x300_obj-cta-01.webp') }}" alt="Icon">
+                    </span>
+                    <span class="mxd-promo__caption reveal-type">Let's talk about your project!</span>
+                  </p>
+                  <div class="mxd-promo__controls anim-uni-in-up">
+                    <a class="btn btn-anim btn-default btn-large btn-additional slide-right-up" href="{{ url_for('contact') }}">
+                      <span class="btn-caption">Contact Us</span>
+                      <i class="ph-bold ph-arrow-up-right"></i>
+                    </a>
+                  </div>
+                </div>
+                <!-- parallax images -->
+                <div class="mxd-promo__images">
+                  <img class="promo-image promo-image-1" src="{{ url_for('static', filename='img/illustrations/cta-img-01.webp') }}" alt="Image">
+                  <img class="promo-image promo-image-2" src="{{ url_for('static', filename='img/illustrations/cta-img-02.webp') }}" alt="Image">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Block - CTA End -->
+
+        </div>
+      </div>
+      <!-- Section - CTA End -->
+
+    </main>
+    <!-- Page Content End -->
+{% endblock %}

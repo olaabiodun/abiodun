@@ -1,0 +1,124 @@
+{% extends "admin/master.html" %}
+
+{% block body %}
+<div class="dashboard">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Portfolio Dashboard</h1>
+            <p class="text-muted">Welcome to your portfolio management system</p>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Projects</h5>
+                    <h2>{{ stats.total_projects }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Featured Projects</h5>
+                    <h2>{{ stats.featured_projects }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Published Posts</h5>
+                    <h2>{{ stats.published_posts }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Unread Messages</h5>
+                    <h2>{{ stats.unread_messages }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Messages -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Messages</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_messages %}
+                        {% for message in recent_messages %}
+                        <div class="message-item">
+                            <strong>{{ message.name }}</strong> - {{ message.email }}
+                            <small class="text-muted">{{ message.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                            <p>{{ message.message[:100] }}{% if message.message|length > 100 %}...{% endif %}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No recent messages</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Projects -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Projects</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_projects %}
+                        {% for project in recent_projects %}
+                        <div class="project-item">
+                            <strong>{{ project.title }}</strong>
+                            <small class="text-muted">{{ project.created_at.strftime('%Y-%m-%d') }}</small>
+                            <p>{{ project.short_description }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No recent projects</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard {
+    padding: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.message-item, .project-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.message-item:last-child, .project-item:last-child {
+    border-bottom: none;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.card h2 {
+    font-size: 2.5rem;
+    margin: 0;
+}
+</style>
+{% endblock %}

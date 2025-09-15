@@ -1,0 +1,503 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section Start -->
+<div class="mxd-section">
+    <div class="mxd-hero-09">
+        <div class="mxd-hero-09__wrap loading-wrap">
+            <div class="mxd-hero-09__headline">
+                <div class="hero-09-headline__caption loading__item">
+                    <p>Crafting dynamic web experiences with modern technologies and innovative solutions</p>
+                </div>
+                <div class="hero-09-headline__title loading__item">
+                    <h1 class="">Olanipekun Abiodun</h1>
+                </div>
+                <div class="hero-09-headline__tags loading__fade">
+                    <span class="tag tag-default tag-outline">Next.js</span>
+                    <span class="tag tag-default tag-outline">Python</span>
+                    <span class="tag tag-default tag-outline">Tailwind CSS</span>
+                    <span class="tag tag-default tag-outline">GSAP</span>
+                    <span class="tag tag-default tag-outline">Flutter</span>
+                    <span class="tag tag-default tag-outline">JavaScript</span>
+                    <span class="tag tag-default tag-outline">Web Development</span>
+                    <span class="tag tag-default tag-outline">Frontend</span>
+                    <span class="tag tag-default tag-outline">Backend</span>
+                    <span class="tag tag-default tag-outline">Full Stack</span>
+                    <span class="tag tag-default tag-outline">Mobile Apps</span>
+                    <span class="tag tag-default tag-outline">UI/UX</span>
+                    <span class="tag tag-default tag-outline">API Development</span>
+                    <span class="tag tag-default tag-outline">Database Design</span>
+                </div>
+            </div>
+            <div class="mxd-hero-09__objects">
+                <div class="hero-09-objects__image loading__item">
+                    <img class="mxd-move" src="{{ url_for('static', filename='img/hero/22_hero-img.webp') }}" alt="Hero Image">
+                </div>
+                <div class="hero-09-objects__item item-01 loading__item">
+                    <div class="mxd-counter horizontal">
+                        <p id="stats-counter-1" class="mxd-counter__number mxd-stats-number xsmall">0</p>
+                        <p class="mxd-counter__descr t-140 t-bright t-small">Years of<br>experience</p>
+                    </div>
+                </div>
+                <div class="hero-09-objects__item item-02 loading__item">
+                    <div class="mxd-counter horizontal">
+                        <p id="stats-counter-2" class="mxd-counter__number mxd-stats-number xsmall">0</p>
+                        <p class="mxd-counter__descr t-140 t-bright t-small">Successful<br>projects</p>
+                    </div>
+                </div>
+                <div class="hero-09-objects__item item-03 loading__item">
+                    <div class="mxd-hero__mark">
+                        <span class="mark-icon"></span>
+                        <span class="mark-text">Available for freelance</span>
+                    </div>
+                </div>
+            </div>
+            <!-- scroll for more -->
+            <div class="mxd-hero-09__more loading__fade">
+                <a class="btn btn-line-default btn-anim slide-down" href="#projects">
+                    <span class="btn-caption">Scroll for more</span>
+                    <i class="ph-bold ph-arrow-elbow-right-down"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero Section End -->
+
+<!-- Section - Projects Pinned #02 Start -->
+<div id="projects" class="mxd-section padding-hero-09 padding-grid-pre-mtext">
+    <div class="mxd-container grid-container">
+        <!-- Block - Projects Pinned #01 with Section Title Start -->
+        <div class="mxd-block">
+            <div class="mxd-pinned-projects">
+                <div class="container-fluid px-0">
+                    <div class="row gx-0">
+                        <div class="col-12 col-xl-5 mxd-pinned-projects__static">
+                            <div class="mxd-pinned-projects__static-inner no-margin">
+                                <!-- Section Title Start -->
+                                <div class="mxd-section-title no-margin-desktop">
+                                    <div class="container-fluid p-0">
+                                        <div class="row g-0">
+                                            <div class="col-12 mxd-grid-item no-margin">
+                                                <div class="mxd-section-title__title">
+                                                    <h2 class="h2-large reveal-type">Projects</h2>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mxd-grid-item no-margin">
+                                                <div class="mxd-section-title__controls anim-uni-in-up">
+                                                    <a class="btn btn-anim btn-default btn-outline slide-right-up" href="{{ url_for('works') }}">
+                                                        <span class="btn-caption">See All</span>
+                                                        <i class="ph-bold ph-arrow-up-right"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Section Title Start -->
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-7 mxd-pinned-projects__scroll">
+                            <div class="mxd-pinned-projects__scroll-inner mxd-grid-item no-margin">
+                                {% for project in projects %}
+                                <!-- item -->
+                                <div class="mxd-project-item">
+                                    <a class="mxd-project-item__media anim-uni-in-up" href="{{ url_for('project_details', project_id=project.id) }}">
+                                        <div class="mxd-project-item__preview preview-image-{{ loop.index }} parallax-img-small">
+                                            <img src="{{ url_for('static', filename=project.image_url) }}" alt="{{ project.title }}">
+                                        </div>
+                                        <div class="mxd-project-item__tags">
+                                            {% for tag in project.get_tags_list() %}
+                                            <span class="tag tag-default tag-permanent">{{ tag }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </a>
+                                    <div class="mxd-project-item__promo">
+                                        <div class="mxd-project-item__name">
+                                            <a class="anim-uni-in-up" href="{{ url_for('project_details', project_id=project.id) }}">
+                                                <span>{{ project.title }}</span> {{ project.short_description }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Block - Projects Pinned #01 with Section Title Start -->
+    </div>
+</div>
+<!-- Section - Projects Pinned #02 End -->
+
+<!-- Section - Marquee Text One Line Start -->
+<div class="mxd-section padding-mtext-pre-stack">
+    <div class="mxd-container fullwidth-container">
+        <!-- Block - Marquee Text One Line Start -->
+        <div class="mxd-block">
+            <div class="marquee marquee-right--gsap muted-extra">
+                <div class="marquee__toright">
+                    <!-- single item -->
+                    <div class="marquee__item one-line item-regular text">
+                        <p class="marquee__text">I Can Do Best</p>
+                        <div class="marquee__image">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor">
+                                <path fill="currentColor" d="M78.4,38.4c0,0-11.8,0-15.8,0c-1.6,0-4.8-0.2-7.1-0.8c-2.3-0.6-4.3-0.8-6.3-2.4c-2-1.2-3.5-3.2-4.7-4.8
+                                    c-1.2-1.6-1.6-3.6-2-5.5c-0.3-1.5-0.7-4.3-0.8-5.9c-0.2-4.3,0-17.4,0-17.4C41.8,0.8,41,0,40.2,0s-1.6,0.8-1.6,1.6c0,0,0,13.1,0,17.4
+                                    c0,1.6-0.6,4.3-0.8,5.9c-0.3,2-0.8,4-2,5.5c-1.2,2-2.8,3.6-4.7,4.8s-4,1.8-6.3,2.4c-1.9,0.5-4.7,0.6-6.7,0.8c-3.9,0.4-16.6,0-16.6,0
+                                    C0.8,38.4,0,39.2,0,40c0,0.8,0.8,1.6,1.6,1.6c0,0,12.2,0,16.6,0c1.6,0,4.8,0.3,6.7,0.8c2.3,0.6,4.3,0.8,6.3,2.4
+                                    c1.6,1.2,3.2,2.8,4.3,4.4c1.2,2,2.1,3.9,2.4,6.3c0.2,1.7,0.7,4.7,0.8,6.7c0.2,4,0,16.2,0,16.2c0,0.8,0.8,1.6,1.6,1.6
+                                    s1.6-0.8,1.6-1.6c0,0,0-12.3,0-16.2c0-1.6,0.5-5.1,0.8-6.7c0.5-2.3,0.8-4.4,2.4-6.3c1.2-1.6,2.8-3.2,4.3-4.4c2-1.2,3.9-2,6.3-2.4
+                                    c1.8-0.3,5.1-0.7,7.1-0.8c3.5-0.2,15.8,0,15.8,0c0.8,0,1.6-0.8,1.6-1.6C80,39.2,79.2,38.4,78.4,38.4C78.4,38.4,78.4,38.4,78.4,38.4z
+                                    "/>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- single item -->
+                    <div class="marquee__item one-line item-regular text">
+                        <p class="marquee__text">I Can Do Best</p>
+                        <div class="marquee__image">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor">
+                                <path fill="currentColor" d="M78.4,38.4c0,0-11.8,0-15.8,0c-1.6,0-4.8-0.2-7.1-0.8c-2.3-0.6-4.3-0.8-6.3-2.4c-2-1.2-3.5-3.2-4.7-4.8
+                                    c-1.2-1.6-1.6-3.6-2-5.5c-0.3-1.5-0.7-4.3-0.8-5.9c-0.2-4.3,0-17.4,0-17.4C41.8,0.8,41,0,40.2,0s-1.6,0.8-1.6,1.6c0,0,0,13.1,0,17.4
+                                    c0,1.6-0.6,4.3-0.8,5.9c-0.3,2-0.8,4-2,5.5c-1.2,2-2.8,3.6-4.7,4.8s-4,1.8-6.3,2.4c-1.9,0.5-4.7,0.6-6.7,0.8c-3.9,0.4-16.6,0-16.6,0
+                                    C0.8,38.4,0,39.2,0,40c0,0.8,0.8,1.6,1.6,1.6c0,0,12.2,0,16.6,0c1.6,0,4.8,0.3,6.7,0.8c2.3,0.6,4.3,0.8,6.3,2.4
+                                    c1.6,1.2,3.2,2.8,4.3,4.4c1.2,2,2.1,3.9,2.4,6.3c0.2,1.7,0.7,4.7,0.8,6.7c0.2,4,0,16.2,0,16.2c0,0.8,0.8,1.6,1.6,1.6
+                                    s1.6-0.8,1.6-1.6c0,0,0-12.3,0-16.2c0-1.6,0.5-5.1,0.8-6.7c0.5-2.3,0.8-4.4,2.4-6.3c1.2-1.6,2.8-3.2,4.3-4.4c2-1.2,3.9-2,6.3-2.4
+                                    c1.8-0.3,5.1-0.7,7.1-0.8c3.5-0.2,15.8,0,15.8,0c0.8,0,1.6-0.8,1.6-1.6C80,39.2,79.2,38.4,78.4,38.4C78.4,38.4,78.4,38.4,78.4,38.4z
+                                    "/>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- single item -->
+                    <div class="marquee__item one-line item-regular text">
+                        <p class="marquee__text">I Can Do Best</p>
+                        <div class="marquee__image">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="currentColor">
+                                <path fill="currentColor" d="M78.4,38.4c0,0-11.8,0-15.8,0c-1.6,0-4.8-0.2-7.1-0.8c-2.3-0.6-4.3-0.8-6.3-2.4c-2-1.2-3.5-3.2-4.7-4.8
+                                    c-1.2-1.6-1.6-3.6-2-5.5c-0.3-1.5-0.7-4.3-0.8-5.9c-0.2-4.3,0-17.4,0-17.4C41.8,0.8,41,0,40.2,0s-1.6,0.8-1.6,1.6c0,0,0,13.1,0,17.4
+                                    c0,1.6-0.6,4.3-0.8,5.9c-0.3,2-0.8,4-2,5.5c-1.2,2-2.8,3.6-4.7,4.8s-4,1.8-6.3,2.4c-1.9,0.5-4.7,0.6-6.7,0.8c-3.9,0.4-16.6,0-16.6,0
+                                    C0.8,38.4,0,39.2,0,40c0,0.8,0.8,1.6,1.6,1.6c0,0,12.2,0,16.6,0c1.6,0,4.8,0.3,6.7,0.8c2.3,0.6,4.3,0.8,6.3,2.4
+                                    c1.6,1.2,3.2,2.8,4.3,4.4c1.2,2,2.1,3.9,2.4,6.3c0.2,1.7,0.7,4.7,0.8,6.7c0.2,4,0,16.2,0,16.2c0,0.8,0.8,1.6,1.6,1.6
+                                    s1.6-0.8,1.6-1.6c0,0,0-12.3,0-16.2c0-1.6,0.5-5.1,0.8-6.7c0.5-2.3,0.8-4.4,2.4-6.3c1.2-1.6,2.8-3.2,4.3-4.4c2-1.2,3.9-2,6.3-2.4
+                                    c1.8-0.3,5.1-0.7,7.1-0.8c3.5-0.2,15.8,0,15.8,0c0.8,0,1.6-0.8,1.6-1.6C80,39.2,79.2,38.4,78.4,38.4C78.4,38.4,78.4,38.4,78.4,38.4z
+                                    "/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Block - Marquee Text One Line End -->
+    </div>
+</div>
+<!-- Section - Marquee Text One Line End -->
+
+<!-- Section - Services/Features Stacking Cards Start -->
+<div class="mxd-section padding-stacked-section">
+    <div class="mxd-container grid-container">
+        <!-- Block - Services/Features Stacking Cards Start -->
+        <div class="mxd-block mxd-grid-item no-margin">
+            <div class="content__block">
+                <div class="stack-wrapper">
+                    <div class="stack-offset"></div>
+                    <div class="services-stack">
+                        <!-- services stack single item -->
+                        <div class="stack-item">
+                            <div class="mxd-services-stack__inner justify-between bg-base-opp">
+                                <div class="mxd-services-stack__controls">
+                                    <a class="btn btn-round btn-round-large btn-additional slide-right-up anim-no-delay" href="#">
+                                        <i class="ph ph-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                                <div class="mxd-services-stack__title width-60">
+                                    <h3 class="opposite">Full-Stack<br>Web Development</h3>
+                                </div>
+                                <div class="mxd-services-stack__info width-60">
+                                    <div class="mxd-services-cards__tags">
+                                        <span class="tag tag-default tag-outline-opposite">Next.js</span>
+                                        <span class="tag tag-default tag-outline-opposite">Python</span>
+                                        <span class="tag tag-default tag-outline-opposite">JavaScript</span>
+                                        <span class="tag tag-default tag-outline-opposite">Tailwind CSS</span>
+                                        <span class="tag tag-default tag-outline-opposite">REST APIs</span>
+                                    </div>
+                                    <p class="t-opposite">I build scalable, high-performance web applications from frontend to backend. 
+                                        Clean code, robust architecture, and seamless user experiences are my priorities.</p>
+                                </div>
+                                <div class="services-stack__image">
+                                    <img class="service-img service-img-s" src="{{ url_for('static', filename='img/services/800x800_ser-01.webp') }}" alt="Service/Feature Image">
+                                    <img class="service-img service-img-m" src="{{ url_for('static', filename='img/services/1000x1000_ser-01.webp') }}" alt="Service/Feature Image">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- services stack single item -->
+                        <div class="stack-item">
+                            <div class="mxd-services-stack__inner justify-between bg-accent">
+                                <div class="mxd-services-stack__controls">
+                                    <a class="btn btn-round btn-round-large btn-base slide-right-up anim-no-delay" href="#">
+                                        <i class="ph ph-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                                <div class="mxd-services-stack__title width-60">
+                                    <h3 class="opposite">Mobile App<br>Development</h3>
+                                </div>
+                                <div class="mxd-services-stack__info width-60">
+                                    <div class="mxd-services-cards__tags">
+                                        <span class="tag tag-default tag-outline-opposite">Flutter</span>
+                                        <span class="tag tag-default tag-outline-opposite">React Native</span>
+                                        <span class="tag tag-default tag-outline-opposite">iOS</span>
+                                        <span class="tag tag-default tag-outline-opposite">Android</span>
+                                        <span class="tag tag-default tag-outline-opposite">Cross-platform</span>
+                                    </div>
+                                    <p class="t-opposite">I develop native and cross-platform mobile applications with Flutter. 
+                                        Fast, responsive, and feature-rich apps that deliver exceptional user experiences across all devices.</p>
+                                </div>
+                                <div class="services-stack__image">
+                                    <img class="service-img service-img-s" src="{{ url_for('static', filename='img/services/800x800_ser-02.webp') }}" alt="Service/Feature Image">
+                                    <img class="service-img service-img-m" src="{{ url_for('static', filename='img/services/1000x1000_ser-02.webp') }}" alt="Service/Feature Image">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- services stack single item -->
+                        <div class="stack-item">
+                            <div class="mxd-services-stack__inner radius-dark justify-between bg-base-tint">
+                                <div class="mxd-services-stack__controls">
+                                    <a class="btn btn-round btn-round-large btn-opposite slide-right-up anim-no-delay" href="#">
+                                        <i class="ph ph-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                                <div class="mxd-services-stack__title width-60">
+                                    <h3>API & Backend<br>Development</h3>
+                                </div>
+                                <div class="mxd-services-stack__info width-60">
+                                    <div class="mxd-services-cards__tags">
+                                        <span class="tag tag-default tag-outline">Python</span>
+                                        <span class="tag tag-default tag-outline">Node.js</span>
+                                        <span class="tag tag-default tag-outline">PostgreSQL</span>
+                                        <span class="tag tag-default tag-outline">MongoDB</span>
+                                        <span class="tag tag-default tag-outline">GraphQL</span>
+                                    </div>
+                                    <p>I design and develop robust backend systems and APIs. From database architecture to 
+                                        microservices, I build scalable solutions that power modern applications efficiently.</p>
+                                </div>
+                                <div class="services-stack__image">
+                                    <img class="service-img service-img-s" src="{{ url_for('static', filename='img/services/800x800_ser-03.webp') }}" alt="Service/Feature Image">
+                                    <img class="service-img service-img-m" src="{{ url_for('static', filename='img/services/1000x1000_ser-03.webp') }}" alt="Service/Feature Image">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- services stack single item -->
+                        <div class="stack-item">
+                            <div class="mxd-services-stack__inner justify-between bg-base-opp">
+                                <div class="mxd-services-stack__controls">
+                                    <a class="btn btn-round btn-round-large btn-additional slide-right-up anim-no-delay" href="#">
+                                        <i class="ph ph-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                                <div class="mxd-services-stack__title width-60">
+                                    <h3 class="opposite">UI/UX &<br>Interactive Design</h3>
+                                </div>
+                                <div class="mxd-services-stack__info width-60">
+                                    <div class="mxd-services-cards__tags">
+                                        <span class="tag tag-default tag-outline-opposite">GSAP</span>
+                                        <span class="tag tag-default tag-outline-opposite">Framer Motion</span>
+                                        <span class="tag tag-default tag-outline-opposite">Three.js</span>
+                                        <span class="tag tag-default tag-outline-opposite">WebGL</span>
+                                        <span class="tag tag-default tag-outline-opposite">Animations</span>
+                                    </div>
+                                    <p class="t-opposite">I create engaging user interfaces and interactive experiences with GSAP and modern animation libraries. 
+                                        Smooth animations, intuitive interactions, and visually stunning web experiences.</p>
+                                </div>
+                                <div class="services-stack__image">
+                                    <img class="service-img service-img-s" src="{{ url_for('static', filename='img/services/800x800_ser-04.webp') }}" alt="Service/Feature Image">
+                                    <img class="service-img service-img-m" src="{{ url_for('static', filename='img/services/1000x1000_ser-04.webp') }}" alt="Service/Feature Image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Block - Services/Features Stacking Cards End -->
+    </div>
+</div>
+<!-- Section - Services/Features Stacking Cards End -->
+
+<!-- Section - About Start -->
+<div class="mxd-section padding-default">
+    <div class="mxd-container grid-container">
+        <!-- Block - About Description with Manifest Start -->
+        <div class="mxd-block">
+            <div class="container-fluid px-0">
+                <div class="row gx-0 d-xl-flex justify-content-xl-center">
+                    <div class="col-12 col-xl-8 mxd-grid-item no-margin">
+                        <div class="mxd-block__content">
+                            <div class="mxd-block__manifest centered anim-uni-in-up">
+                                <p class="mxd-manifest mxd-manifest-l reveal-type">I'm a passionate software developer with 5 years of experience specializing in 
+                                    modern web technologies. I craft dynamic web experiences using Next.js, Python, Tailwind CSS, 
+                                    GSAP, Flutter, and JavaScript to build innovative and scalable solutions.</p>
+                                <div class="mxd-manifest__controls anim-uni-in-up">
+                                    <div class="mxd-btngroup centered">
+                                        <a class="btn btn-anim btn-default btn-accent slide-right-up" href="{{ url_for('works_masonry') }}">
+                                            <span class="btn-caption">My Works</span>
+                                            <i class="ph-bold ph-arrow-up-right"></i>
+                                        </a>
+                                        <a class="btn btn-anim btn-default btn-outline slide-down" href="#0">
+                                            <span class="btn-caption">Download CV</span>
+                                            <i class="ph-bold ph-arrow-down"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Block - About Description with Manifest End -->
+    </div>
+</div>
+<!-- Section - About End -->
+
+<!-- Section - Parallax Divider Start -->
+<div class="mxd-section padding-pre-title">
+    <div class="mxd-container">
+        <div class="mxd-container__circle">
+            <a class="btn-rotating btn-rotating-blur-outline ver-02" href="{{ url_for('contact') }}">
+                <!-- SVG rotating text -->
+                <svg version="1.1" id="scrollDown" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+                    viewBox="0 0 160 160" style="enable-background:new 0 0 160 160;" xml:space="preserve" 
+                    class="btn-rotating__text animate-rotation" data-value="360">
+                    <defs>
+                        <path id="textPath" d="M149.7,80c0,38.5-31.2,69.7-69.7,69.7S10.3,118.5,10.3,80S41.5,10.3,80,10.3S149.7,41.5,149.7,80z"/>
+                    </defs>
+                    <g>
+                        <use xlink:href="#textPath" fill="none"></use>
+                        <text>
+                            <!-- button text here!!! -->
+                            <textPath xlink:href="#textPath">Let's start new project * Let's start new project * </textPath>
+                        </text>
+                    </g>
+                </svg>
+                <!-- image -->
+                <img class="btn-rotating__image" src="{{ url_for('static', filename='img/icons/300x300_obj-btn-02.webp') }}" alt="Object">
+            </a>
+        </div>
+        <div class="mxd-divider">
+            <div class="mxd-divider__image divider-image-6 parallax-img"></div>
+        </div>
+    </div>
+</div>
+<!-- Section - Parallax Divider End -->
+
+<!-- Section - Blog Preview Start -->
+<div class="mxd-section padding-blog">
+    <div class="mxd-container grid-container">
+        <!-- Block - Section Title Start -->
+        <div class="mxd-block">
+            <div class="mxd-section-title pre-grid">
+                <div class="container-fluid p-0">
+                    <div class="row g-0">
+                        <div class="col-12 col-xl-5 mxd-grid-item no-margin">
+                            <div class="mxd-section-title__hrtitle">
+                                <h2 class="reveal-type anim-uni-in-up">Recent insights</h2>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-4 mxd-grid-item no-margin">
+                            <div class="mxd-section-title__hrdescr">
+                                <p class="anim-uni-in-up">Inspiring ideas, creative insights, and the latest 
+                                    in design and tech. Fueling innovation for your digital journey.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-3 mxd-grid-item no-margin">
+                            <div class="mxd-section-title__hrcontrols anim-uni-in-up">
+                                <a class="btn btn-anim btn-default btn-outline slide-right-up" href="{{ url_for('blog') }}">
+                                    <span class="btn-caption">All Articles</span>
+                                    <i class="ph-bold ph-arrow-up-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Block - Section Title End -->
+
+        <!-- Block - Blog Preview Cards Start -->
+        <div class="mxd-block">
+            <div class="mxd-blog-preview">
+                <div class="container-fluid p-0">
+                    <div class="row g-0">
+                        {% for post in posts %}
+                        <!-- item -->
+                        <div class="col-12 col-xl-4 mxd-blog-preview__item mxd-grid-item animate-card-3">
+                            <a class="mxd-blog-preview__media" href="{{ url_for('blog_article', slug=post.slug) }}">
+                                <div class="mxd-blog-preview__image blog-preview-image-{{ loop.index }} parallax-img-small">
+                                    <img class="parallax-img-small" src="{{ url_for('static', filename=post.featured_image) }}" alt="Blog Preview Image">
+                                </div>
+                                <div class="mxd-preview-hover">
+                                    <i class="mxd-preview-hover__icon">
+                                        <img src="{{ url_for('static', filename='img/icons/icon-eye.svg') }}" alt="Eye Icon">
+                                    </i>
+                                </div>
+                                <div class="mxd-blog-preview__tags">
+                                    {% for tag in post.get_tags_list() %}
+                                    <span class="tag tag-default tag-permanent">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                            </a>
+                            <div class="mxd-blog-preview__data">
+                                <a class="anim-uni-in-up" href="{{ url_for('blog_article', slug=post.slug) }}">{{ post.title }}</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Block - Blog Preview Cards End -->
+    </div>
+</div>
+<!-- Section - Blog Preview End -->
+
+<!-- Section - CTA Start -->
+<div class="mxd-section overflow-hidden">
+    <div class="mxd-container">
+        <!-- Block - CTA Start -->
+        <div class="mxd-block">
+            <div class="mxd-promo">
+                <div class="mxd-promo__inner anim-zoom-out-container">
+                    <!-- background -->
+                    <div class="mxd-promo__bg"></div>
+                    <!-- caption -->
+                    <div class="mxd-promo__content">
+                        <p class="mxd-promo__title anim-uni-in-up">
+                            <span class="mxd-promo__icon">
+                                <img src="{{ url_for('static', filename='img/icons/300x300_obj-cta-01.webp') }}" alt="Icon">
+                            </span>
+                            <span class="mxd-promo__caption reveal-type">Let's talk about your project!</span>
+                        </p>
+                        <div class="mxd-promo__controls anim-uni-in-up">
+                            <a class="btn btn-anim btn-default btn-large btn-additional slide-right-up" href="{{ url_for('contact') }}">
+                                <span class="btn-caption">Contact Me</span>
+                                <i class="ph-bold ph-arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- parallax images -->
+                    <div class="mxd-promo__images">
+                        <img class="promo-image promo-image-1" src="{{ url_for('static', filename='img/illustrations/cta-img-01.webp') }}" alt="Image">
+                        <img class="promo-image promo-image-2" src="{{ url_for('static', filename='img/illustrations/cta-img-02.webp') }}" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Block - CTA End -->
+    </div>
+</div>
+<!-- Section - CTA End -->
+{% endblock %}
+
+
