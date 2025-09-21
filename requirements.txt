@@ -13,6 +13,7 @@ WTForms==2.3.3
 Flask-WTF==1.1.1
 python-dotenv==1.0.0
 gunicorn
+email_validator
 
 # AI and Scheduling
 google-generativeai==0.8.3
