@@ -9,6 +9,16 @@ Flask-SQLAlchemy==3.0.5
 Flask-Migrate==4.0.5
 Flask-Mail==0.9.1
 Flask-Admin==1.6.1
+WTForms==2.3.3
+Flask-WTF==1.1.1
 python-dotenv==1.0.0
 gunicorn
-flask_wtf
+
+# AI and Scheduling
+google-generativeai==0.8.3
+Flask-APScheduler==1.13.1
+python-crontab==3.2.0
+
+# Performance and Optimization
+Flask-Caching==2.3.0
+Flask-Compress==1.15

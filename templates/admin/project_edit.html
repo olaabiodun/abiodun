@@ -1,0 +1,338 @@
+{% extends 'admin/model/edit.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Edit Project</h2>
+            <p class="help-block">Fill in all project details below. Fields are organized into sections for better management.</p>
+        </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="row">
+            <!-- Basic Information Section -->
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Basic Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.title.label }}
+                                {{ form.title(class="form-control") }}
+                                {% if form.title.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.title.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.slug.label }}
+                                {{ form.slug(class="form-control") }}
+                                {% if form.slug.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.slug.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.excerpt.label }}
+                                {{ form.excerpt(class="form-control", rows=3) }}
+                                {% if form.excerpt.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.excerpt.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.category.label }}
+                                {{ form.category(class="form-control") }}
+                                {% if form.category.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.category.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form.description.label }}
+                                {{ form.description(class="form-control", rows=4) }}
+                                {% if form.description.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.description.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Information Section -->
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Client Information</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.client.label }}
+                                {{ form.client(class="form-control") }}
+                                {% if form.client.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.client.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.industry.label }}
+                                {{ form.industry(class="form-control") }}
+                                {% if form.industry.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.industry.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.services.label }}
+                                {{ form.services(class="form-control") }}
+                                <small class="text-muted">Separate multiple services with commas</small>
+                                {% if form.services.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.services.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.tags.label }}
+                                {{ form.tags(class="form-control") }}
+                                <small class="text-muted">Separate multiple tags with commas</small>
+                                {% if form.tags.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.tags.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge Section -->
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Challenge</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.challenge_summary.label }}
+                                {{ form.challenge_summary(class="form-control", rows=3) }}
+                                {% if form.challenge_summary.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.challenge_summary.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.solution_summary.label }}
+                                {{ form.solution_summary(class="form-control", rows=3) }}
+                                {% if form.solution_summary.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.solution_summary.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form.challenge_description.label }}
+                                {{ form.challenge_description(class="form-control", rows=5) }}
+                                {% if form.challenge_description.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.challenge_description.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form.solution_description.label }}
+                                {{ form.solution_description(class="form-control", rows=5) }}
+                                {% if form.solution_description.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.solution_description.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Feedback Section -->
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Client Feedback</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form.client_feedback.label }}
+                                {{ form.client_feedback(class="form-control", rows=4) }}
+                                {% if form.client_feedback.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.client_feedback.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                {{ form.client_name.label }}
+                                {{ form.client_name(class="form-control") }}
+                                {% if form.client_name.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.client_name.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.client_role.label }}
+                                {{ form.client_role(class="form-control") }}
+                                {% if form.client_role.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.client_role.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.client_company.label }}
+                                {{ form.client_company(class="form-control") }}
+                                {% if form.client_company.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.client_company.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form.client_company_url.label }}
+                                {{ form.client_company_url(class="form-control") }}
+                                {% if form.client_company_url.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.client_company_url.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Media and URLs Section -->
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Media and URLs</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.image_url.label }}
+                                {{ form.image_url(class="form-control") }}
+                                {% if form.image_url.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.image_url.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.project_image.label }}
+                                {{ form.project_image(class="form-control") }}
+                                <small class="text-muted">Upload a new image to replace current one</small>
+                                {% if form.project_image.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.project_image.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.github_url.label }}
+                                {{ form.github_url(class="form-control") }}
+                                {% if form.github_url.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.github_url.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.live_url.label }}
+                                {{ form.live_url(class="form-control") }}
+                                {% if form.live_url.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.live_url.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metadata Section -->
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Settings</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="checkbox">
+                                    <label>
+                                        {{ form.featured() }} {{ form.featured.label.text }}
+                                    </label>
+                                    <small class="text-muted">Check to feature this project on the homepage</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save Project</button>
+                    <a href="{{ url_for('admin.index') }}" class="btn btn-default">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

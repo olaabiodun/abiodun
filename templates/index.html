@@ -104,7 +104,7 @@
                                 <div class="mxd-project-item">
                                     <a class="mxd-project-item__media anim-uni-in-up" href="{{ url_for('project_details', project_id=project.id) }}">
                                         <div class="mxd-project-item__preview preview-image-{{ loop.index }} parallax-img-small">
-                                            <img src="{{ url_for('static', filename=project.image_url) }}" alt="{{ project.title }}">
+                                            <img src="{{ url_for('static', filename='img/works/preview/1200x800_prv-01.webp') }}" alt="{{ project.title }}" loading="lazy" decoding="async">
                                         </div>
                                         <div class="mxd-project-item__tags">
                                             {% for tag in project.get_tags_list() %}

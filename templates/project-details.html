@@ -108,7 +108,7 @@
       <div class="mxd-section">
         <div class="mxd-container">
           <div class="mxd-divider loading__fade">
-            <div class="mxd-divider__image prj-details-img-01 parallax-img"></div>
+            <div class="mxd-divider__image prj-details-img-01 parallax-img"{% if project.image_url %} style="background-image: url('{{ project.image_url }}');"{% endif %}></div>
           </div>
         </div>
       </div>
@@ -145,13 +145,13 @@
             <div class="mxd-project-cards">
               <div class="container-fluid px-0">
                 <div class="row gx-0">
-                  {% for image in project.images %}
-                    <div class="col-12 col-xl-{{ image.size }} mxd-project-cards__item mxd-grid-item anim-uni-scale-in-{{ image.animation }}">
-                      <div class="mxd-project-cards__inner align-{{ image.alignment }} bg-{{ image.background }} radius-m">
-                        <img src="{{ url_for('static', filename=image.path) }}" alt="{{ image.alt }}">
+                  {% if project.image_url %}
+                    <div class="col-12 col-xl-12 mxd-project-cards__item mxd-grid-item anim-uni-scale-in-up">
+                      <div class="mxd-project-cards__inner align-center bg-light radius-m">
+                        <img src="{{ project.image_url }}" alt="{{ project.title }} Main Image" style="max-width: 100%; height: auto;" loading="lazy" decoding="async">
                       </div>
                     </div>
-                  {% endfor %}
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -183,7 +183,7 @@
           <!-- Project Block - Parallax Fullwidth Image Start -->
           <div class="mxd-project__block mxd-grid-item no-margin">
             <div class="mxd-divider">
-              <div class="mxd-divider__image prj-details-img-02 parallax-img"></div>
+              <div class="mxd-divider__image prj-details-img-02 parallax-img"{% if project.image_url %} style="background-image: url('{{ project.image_url }}');"{% endif %}></div>
             </div>
           </div>
           <!-- Project Block - Parallax Fullwidth Image End -->
@@ -289,8 +289,6 @@
 
         </div>
       </div>
-      <!-- Section - CTA End -->
-
     </main>
     <!-- Page Content End -->
 {% endblock %}
