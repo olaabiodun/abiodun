@@ -9,9 +9,9 @@
   
     .mxd-container {
   
-        padding-left: 1rem !important;
+        padding-left: 0 !important;
   
-        padding-right: 1rem !important;
+        padding-right: 0 !important;
   
     }
   
@@ -19,9 +19,9 @@
   
     .mxd-container.grid-container {
   
-        padding-left: 0.75rem !important;
+        padding-left: 0 !important;
   
-        padding-right: 0.75rem !important;
+        padding-right: 0 !important;
   
     }
   
@@ -29,9 +29,9 @@
   
     .mxd-container.grid-l-container {
   
-        padding-left: 1rem !important;
+        padding-left: 0 !important;
   
-        padding-right: 1rem !important;
+        padding-right: 0 !important;
   
     }
   
@@ -45,9 +45,9 @@
   
     .mxd-container {
   
-        padding-left: 0.5rem !important;
+        padding-left: 0 !important;
   
-        padding-right: 0.5rem !important;
+        padding-right: 0 !important;
   
     }
   
@@ -55,9 +55,9 @@
   
     .mxd-container.grid-container {
   
-        padding-left: 0.5rem !important;
+        padding-left: 0 !important;
   
-        padding-right: 0.5rem !important;
+        padding-right: 0 !important;
   
     }
   
