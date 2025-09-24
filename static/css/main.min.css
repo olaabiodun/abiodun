@@ -7328,7 +7328,7 @@ form textarea:required:valid {
     gap: 3rem;
     width: 100%;
     max-width: 1920px;
-    padding: 0 3rem
+    padding: 0 1rem
 }
 
 @media only screen and (min-width:768px) {
@@ -11900,7 +11900,7 @@ form textarea:required:valid {
 .mxd-hero-09__headline,
 .mxd-hero-09__objects {
     position: relative;
-    padding: 0 3rem
+    padding: 0 2rem
 }
 
 @media only screen and (min-width:768px) {
