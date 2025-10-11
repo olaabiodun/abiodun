@@ -51,7 +51,12 @@ app.config['CONTACT_AVAILABILITY'] = os.environ.get('CONTACT_AVAILABILITY', 'Ava
 # Email configuration
 app.config['STATIC_FOLDER'] = 'static'
 app.config['TEMPLATE_FOLDER'] = 'templates'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///portfolio.db')
+# Handle both PostgreSQL and SQLite database URLs
+uri = os.environ.get('DATABASE_URL', 'sqlite:///portfolio.db')
+# Fix for Render's PostgreSQL URL format
+if uri and uri.startswith('postgres://'):
+    uri = uri.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
