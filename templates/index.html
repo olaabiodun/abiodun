@@ -13,22 +13,24 @@
         <div class="hero-09-headline__title loading__item">
           <h1 class="">Olanipekun Abiodun</h1>
         </div>
-        <div class="hero-09-headline__tags loading__fade">
-          <span class="tag tag-default tag-outline">Next.js</span>
-          <span class="tag tag-default tag-outline">Python</span>
-          <span class="tag tag-default tag-outline">Tailwind CSS</span>
-          <span class="tag tag-default tag-outline">GSAP</span>
-          <span class="tag tag-default tag-outline">Flutter</span>
-          <span class="tag tag-default tag-outline">JavaScript</span>
-          <span class="tag tag-default tag-outline">Web Development</span>
-          <span class="tag tag-default tag-outline">Frontend</span>
-          <span class="tag tag-default tag-outline">Backend</span>
-          <span class="tag tag-default tag-outline">Full Stack</span>
-          <span class="tag tag-default tag-outline">Mobile Apps</span>
-          <span class="tag tag-default tag-outline">UI/UX</span>
-          <span class="tag tag-default tag-outline">API Development</span>
-          <span class="tag tag-default tag-outline">Database Design</span>
-        </div>
+       <div class="hero-09-headline__tags loading__fade">
+  <span class="tag tag-default tag-outline">AI/ML Engineering</span>
+  <span class="tag tag-default tag-outline">Data Science</span>
+  <span class="tag tag-default tag-outline">Python</span>
+  <span class="tag tag-default tag-outline">TensorFlow</span>
+  <span class="tag tag-default tag-outline">PyTorch</span>
+  <span class="tag tag-default tag-outline">UI/UX Design</span>
+  <span class="tag tag-default tag-outline">React</span>
+  <span class="tag tag-default tag-outline">Next.js</span>
+  <span class="tag tag-default tag-outline">Figma</span>
+  <span class="tag tag-default tag-outline">Tailwind CSS</span>
+  <span class="tag tag-default tag-outline">Computer Vision</span>
+  <span class="tag tag-default tag-outline">NLP</span>
+  <span class="tag tag-default tag-outline">DevOps</span>
+  <span class="tag tag-default tag-outline">Docker</span>
+  <span class="tag tag-default tag-outline">Responsive Design</span>
+  <span class="tag tag-default tag-outline">User Research</span>
+</div>
       </div>
       <div class="mxd-hero-09__objects">
         <div class="hero-09-objects__image loading__item">
@@ -54,10 +56,10 @@
         <div class="hero-09-objects__item item-02 loading__item">
           <div class="mxd-counter horizontal">
             <p
-              id="stats-counter-2"
-              class="mxd-counter__number mxd-stats-number xsmall"
+              id=""
+              class="mxd-stats-number xsmall"
             >
-              0
+              30+
             </p>
             <p class="mxd-counter__descr t-140 t-bright t-small">
               Successful<br />projects
@@ -133,13 +135,17 @@
                     <div
                       class="mxd-project-item__preview preview-image-{{ loop.index }} parallax-img-small"
                     >
-                      <img
-                        src="{{ project.image_url }}"
-                        alt="{{ project.title }}"
-                        loading="lazy"
-                        decoding="async"
-                        
-                      />
+                      <div
+                        class="mxd-project-cards__inner align-center bg-light radius-m"
+                      >
+                        <img
+                          src="{{ project.image_url }}"
+                          alt="{{ project.title }} Main Image"
+                          style="max-width: 100%; height: 100%"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
                     </div>
                     <div class="mxd-project-item__tags">
                       {% for tag in project.get_tags_list() %}
@@ -335,30 +341,31 @@
                   </a>
                 </div>
                 <div class="mxd-services-stack__title width-60">
-                  <h3 class="opposite">Mobile App<br />Development</h3>
+                  <h3 class="opposite">Data Science<br />& Analytics</h3>
                 </div>
                 <div class="mxd-services-stack__info width-60">
                   <div class="mxd-services-cards__tags">
                     <span class="tag tag-default tag-outline-opposite"
-                      >Flutter</span
+                      >Machine Learning</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >React Native</span
+                      >Data Visualization</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >iOS</span
+                      >Predictive Analytics</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Android</span
+                      >Python</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Cross-platform</span
+                      >Big Data</span
                     >
                   </div>
                   <p class="t-opposite">
-                    I develop native and cross-platform mobile applications with
-                    Flutter. Fast, responsive, and feature-rich apps that
-                    deliver exceptional user experiences across all devices.
+                    I transform raw data into actionable insights using advanced
+                    analytics and machine learning. From data visualization to
+                    predictive modeling, I help businesses make data-driven
+                    decisions.
                   </p>
                 </div>
                 <div class="services-stack__image">
@@ -389,20 +396,25 @@
                   </a>
                 </div>
                 <div class="mxd-services-stack__title width-60">
-                  <h3>API & Backend<br />Development</h3>
+                  <h3>AI & Machine<br />Learning</h3>
                 </div>
                 <div class="mxd-services-stack__info width-60">
                   <div class="mxd-services-cards__tags">
-                    <span class="tag tag-default tag-outline">Python</span>
-                    <span class="tag tag-default tag-outline">Node.js</span>
-                    <span class="tag tag-default tag-outline">PostgreSQL</span>
-                    <span class="tag tag-default tag-outline">MongoDB</span>
-                    <span class="tag tag-default tag-outline">GraphQL</span>
+                    <span class="tag tag-default tag-outline"
+                      >Deep Learning</span
+                    >
+                    <span class="tag tag-default tag-outline"
+                      >Computer Vision</span
+                    >
+                    <span class="tag tag-default tag-outline">NLP</span>
+                    <span class="tag tag-default tag-outline">TensorFlow</span>
+                    <span class="tag tag-default tag-outline">PyTorch</span>
                   </div>
                   <p>
-                    I design and develop robust backend systems and APIs. From
-                    database architecture to microservices, I build scalable
-                    solutions that power modern applications efficiently.
+                    I develop intelligent systems using cutting-edge AI and
+                    machine learning techniques. From computer vision to natural
+                    language processing, I create solutions that learn and adapt
+                    to solve complex business challenges.
                   </p>
                 </div>
                 <div class="services-stack__image">
@@ -433,31 +445,31 @@
                   </a>
                 </div>
                 <div class="mxd-services-stack__title width-60">
-                  <h3 class="opposite">UI/UX &<br />Interactive Design</h3>
+                  <h3 class="opposite">DevOps &<br />Cloud Solutions</h3>
                 </div>
                 <div class="mxd-services-stack__info width-60">
                   <div class="mxd-services-cards__tags">
                     <span class="tag tag-default tag-outline-opposite"
-                      >GSAP</span
+                      >Docker</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Framer Motion</span
+                      >Kubernetes</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Three.js</span
+                      >AWS/GCP</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >WebGL</span
+                      >CI/CD</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Animations</span
+                      >Infrastructure as Code</span
                     >
                   </div>
                   <p class="t-opposite">
-                    I create engaging user interfaces and interactive
-                    experiences with GSAP and modern animation libraries. Smooth
-                    animations, intuitive interactions, and visually stunning
-                    web experiences.
+                    I streamline development workflows and deployment processes
+                    with modern DevOps practices. From containerization to cloud
+                    architecture, I build scalable and reliable infrastructure
+                    that powers your applications.
                   </p>
                 </div>
                 <div class="services-stack__image">
@@ -494,11 +506,13 @@
             <div class="mxd-block__content">
               <div class="mxd-block__manifest centered anim-uni-in-up">
                 <p class="mxd-manifest mxd-manifest-l reveal-type">
-                  I'm a passionate software developer with 5 years of experience
-                  specializing in modern web technologies. I craft dynamic web
-                  experiences using Next.js, Python, Tailwind CSS, GSAP,
-                  Flutter, and JavaScript to build innovative and scalable
-                  solutions.
+                  I'm a passionate technologist who loves turning complex
+                  problems into elegant solutions. With expertise in AI/ML, Data
+                  Science, and DevOps, I bridge the gap between data and
+                  deployment. Whether it's building intelligent systems,
+                  extracting insights from data, or architecting scalable cloud
+                  infrastructure, I thrive on creating technology that makes an
+                  impact.
                 </p>
                 <div class="mxd-manifest__controls anim-uni-in-up">
                   <div class="mxd-btngroup centered">
@@ -576,7 +590,9 @@
       </a>
     </div>
     <div class="mxd-divider">
-      <div class="mxd-divider__image divider-image-6 parallax-img"></div>
+      <div class="mxd-divider__image divider-image-6 parallax-img">
+        <img src="{{ url_for('static', filename='img/avatars/1400x1400_ava-01.webp')}}" alt="">
+      </div>
     </div>
   </div>
 </div>

@@ -332,11 +332,11 @@
                             Crafted with
                             <i class="ph-fill ph-code t-additional"></i>
                             by
-                            <a class="no-effect" href="https://github.com/" target="_blank">Olanipekun Abiodun</a>
+                            <a class="no-effect" href='https://www.linkedin.com/in/abiodun-olanipekun-1b131a386' target="_blank">Olanipekun Abiodun</a>
                         </p>
                         <p class="t-xsmall">
                             <i class="ph ph-copyright"></i>
-                            2025
+                            {{ current_year }}
                         </p>
                     </div>
                 </div>
@@ -529,11 +529,12 @@
                         </div>
                         <!-- subscribe form -->
                         <form class="form notify-form form-light" action="{{ url_for('subscribe') }}" method="POST">
-                            <input type="email" name="email" placeholder="Your Email" required>
-                            <button class="btn btn-form btn-absolute-right btn-muted slide-right-up anim-no-delay" type="submit">
-                                <i class="ph ph-arrow-up-right"></i>
-                            </button>
-                        </form>
+    <input type="hidden" name="csrf_token"/>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <button class="btn btn-form btn-absolute-right btn-muted slide-right-up anim-no-delay" type="submit">
+        <i class="ph ph-arrow-up-right"></i>
+    </button>
+</form>
                     </div>
                 </div>
             </div>
@@ -564,7 +565,7 @@
                         <p class="t-xsmall t-muted">
                             <a class="no-effect" href="https://github.com/olaabiodun" target="_blank">Built with code</a>
                             <i class="ph-bold ph-copyright"></i>
-                            2025
+                            {{ current_year }}
                         </p>
                     </div>
                 </div>

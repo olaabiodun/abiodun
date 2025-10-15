@@ -9,6 +9,7 @@ from models import db, Project, BlogPost, ContactMessage, NewsletterSubscriber
 import os
 from datetime import datetime
 
+
 app = Flask(__name__)
 app.secret_key = '669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'  # Change this to a random secret key
 
@@ -102,6 +103,15 @@ def index():
     featured_projects = Project.query.filter_by(featured=True).limit(3).all()
     recent_posts = BlogPost.query.filter_by(published=True).order_by(BlogPost.created_at.desc()).limit(3).all()
     return render_template('index.html', projects=featured_projects, posts=recent_posts)
+
+@app.route('/admin/')
+def admin_dashboard():
+    stats = {
+        'total_projects': Project.query.count(),
+        'featured_projects': Project.query.filter_by(featured=True).count(),
+        # Add more stats as needed
+    }
+    return render_template('admin/dashboard.html', stats=stats)
 
 @app.route('/contact')
 def contact():

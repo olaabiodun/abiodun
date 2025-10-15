@@ -5641,32 +5641,31 @@ form textarea:required:valid {
     position: relative;
     display: block;
     margin-bottom: 1.4rem;
-    height: 460px
+    height: fit-content;
 }
 
 @media only screen and (min-width:768px) {
     .mxd-project-item__media {
-        height: 600px;
+        height: fit-content;
         margin-bottom: 2.3rem
     }
 }
 
 @media only screen and (min-width:1200px) {
     .mxd-project-item__media {
-        height: 760px
+        height: fit-content
     }
 }
 
 @media only screen and (min-width:1600px) {
     .mxd-project-item__media {
-        height: 930px
+        height: fit-content
     }
 }
 
 .mxd-project-item__preview {
     position: relative;
-    width: 100%;
-    height: 460px;
+    height: 100%;
     -moz-border-radius: var(--_radius-l);
     border-radius: var(--_radius-l);
     overflow: hidden;
