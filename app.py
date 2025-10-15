@@ -9,7 +9,6 @@ from models import db, Project, BlogPost, ContactMessage, NewsletterSubscriber
 import os
 from datetime import datetime
 
-
 app = Flask(__name__)
 app.secret_key = '669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'  # Change this to a random secret key
 
