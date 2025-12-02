@@ -155,6 +155,9 @@
                         const submitBtn = document.getElementById('submit-button');
                         const statusDiv = document.getElementById('form-status');
                         
+                        // Clear previous messages
+                        statusDiv.innerHTML = '';
+                        
                         // Disable submit button and show loading state
                         submitBtn.disabled = true;
                         submitBtn.innerHTML = '<span class="btn-caption">Sending...</span>';
@@ -164,40 +167,60 @@
                                 method: 'POST',
                                 body: formData,
                                 headers: {
-                                    'Accept': 'application/json'
+                                    'Accept': 'application/json',
+                                    'X-Requested-With': 'XMLHttpRequest'  // For CSRF protection
                                 }
                             });
                             
                             const result = await response.json();
                             
-                            if (response.ok) {
+                            if (result.success) {
                                 // Success
                                 form.reset();
-                                statusDiv.innerHTML = '<div class="alert alert-success">Thank you! Your message has been sent successfully.</div>';
+                                statusDiv.innerHTML = `
+                                    <div class="form__reply centered text-center success">
+                                        <p class="reply__title">Success!</p>
+                                        <span class="reply__text">${result.message}</span>
+                                    </div>`;
                             } else {
                                 // Handle validation errors
-                                let errorHtml = '<div class="alert alert-danger"><ul class="mb-0">';
-                                for (const [field, errors] of Object.entries(result.errors || {})) {
-                                    errorHtml += `<li>${errors[0]}</li>`;
+                                let errorHtml = '<div class="form__reply centered text-center error">';
+                                errorHtml += '<p class="reply__title">Error</p>';
+                                
+                                if (result.errors) {
+                                    errorHtml += '<ul class="text-left mt-2">';
+                                    for (const [field, errors] of Object.entries(result.errors)) {
+                                        errorHtml += `<li>${errors[0]}</li>`;
+                                    }
+                                    errorHtml += '</ul>';
+                                } else {
+                                    errorHtml += `<span class="reply__text">${result.message || 'An error occurred. Please try again.'}</span>`;
                                 }
-                                errorHtml += '</ul></div>';
+                                
+                                errorHtml += '</div>';
                                 statusDiv.innerHTML = errorHtml;
                             }
                         } catch (error) {
-                            statusDiv.innerHTML = '<div class="alert alert-danger">An error occurred. Please try again later.</div>';
                             console.error('Error:', error);
+                            statusDiv.innerHTML = `
+                                <div class="form__reply centered text-center error">
+                                    <p class="reply__title">Error</p>
+                                    <span class="reply__text">An error occurred. Please try again later.</span>
+                                </div>`;
                         } finally {
                             // Re-enable submit button
                             submitBtn.disabled = false;
                             submitBtn.innerHTML = '<span class="btn-caption">Submit</span><i class="ph-bold ph-arrow-up-right"></i>';
                             
                             // Scroll to status message
-                            statusDiv.scrollIntoView({ behavior: 'smooth' });
+                            statusDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             
-                            // Clear status after 10 seconds
-                            setTimeout(() => {
-                                statusDiv.innerHTML = '';
-                            }, 10000);
+                            // Clear success message after 10 seconds
+                            if (statusDiv.querySelector('.success')) {
+                                setTimeout(() => {
+                                    statusDiv.innerHTML = '';
+                                }, 10000);
+                            }
                         }
                     });
                     </script>

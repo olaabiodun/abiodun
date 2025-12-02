@@ -28,18 +28,27 @@
                             <h1 class="h1-small">{{ post.title }}</h1>
                         </div>
                         <div class="mxd-article__tags loading__item">
-                            {% for tag in post.get_tags_list() %}
-                            <span class="tag tag-default tag-outline tag-link-outline">
-                                <a href="#">{{ tag }}</a>
-                            </span>
-                            {% endfor %}
+                            {% if post.tags %}
+                                {% if post.tags is string %}
+                                    {% set tag_list = post.tags.split(',') %}
+                                {% else %}
+                                    {% set tag_list = post.tags %}
+                                {% endif %}
+                                {% for tag in tag_list %}
+                                    {% if tag %}
+                                    <span class="tag tag-default tag-outline tag-link-outline">
+                                        <a href="#">{{ tag.strip() if tag is string else tag }}</a>
+                                    </span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                     <!-- Article Headline End -->
 
                     <!-- Article Thumb Start -->
                     <div class="mxd-article__thumb loading__fade">
-                        <img src="{{ url_for('static', filename=post.featured_image or 'img/blog/article/1920x1280_tm-01.webp') }}" alt="{{ post.title }}">
+                        <img src="{{ post.featured_image }}" alt="{{ post.title }}">
                     </div>
                     <!-- Article Thumb End -->
 
@@ -47,7 +56,9 @@
                     <div class="mxd-article__content">
                         <div class="mxd-article__block">
                             <p class="t-large mxd-article__excerpt">{{ post.excerpt }}</p>
-                            {{ post.content | safe }}
+                            <div class="blog-content">
+                                {{ post.content | replace('\n', '<br><br>') | safe }}
+                            </div>
                         </div>
                     </div>
                     <!-- Article Content End -->

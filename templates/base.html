@@ -31,7 +31,8 @@
 
     <!-- Template Styles Start -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/loaders/loader.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/plugins.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-optimization.css') }}?v=1">
     
@@ -267,11 +268,7 @@
                         <div class="main-menu">
                             <nav class="main-menu__content">
                                 <ul id="main-menu" class="main-menu__accordion">
-                                    <li class="main-menu__item">
-                                        <a class="main-menu__link btn btn-anim" href="{{ url_for('index') }}">
-                                            <span class="btn-caption">Home</span>
-                                        </a>
-                                    </li>
+
                                     <li class="main-menu__item">
                                         <div class="main-menu__toggle">
                                             <span class="main-menu__link btn btn-anim">
@@ -303,6 +300,11 @@
                                     <li class="main-menu__item">
                                         <a class="main-menu__link btn btn-anim" href="{{ url_for('blog') }}">
                                             <span class="btn-caption">Insights</span>
+                                        </a>
+                                    </li>
+                                    <li class="main-menu__item">
+                                        <a class="main-menu__link btn btn-anim" href="{{ url_for('faq') }}">
+                                            <span class="btn-caption">FAQ</span>
                                         </a>
                                     </li>
                                     
@@ -464,15 +466,20 @@
                                     <span class="btn-caption">Contact</span>
                                 </a>
                             </li>
+                            <li class="footer-nav__item anim-uni-in-up">
+                                <a href="{{ url_for('faq') }}" class="footer-nav__link btn-anim">
+                                    <span class="btn-caption">Faq</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <!-- links -->
                     <div class="footer-blocks__links anim-uni-in-up">
-                        <a class="btn btn-line-xsmall btn-muted slide-right anim-no-delay" href="#0">
+                        <a class="btn btn-line-xsmall btn-muted slide-right anim-no-delay" href="{{ url_for('privacy_policy') }}">
                             <span class="btn-caption">Privacy Policy</span>
                             <i class="ph ph-arrow-right"></i>
                         </a>
-                        <a class="btn btn-line-xsmall btn-muted slide-right anim-no-delay" href="#0">
+                        <a class="btn btn-line-xsmall btn-muted slide-right anim-no-delay" href="{{ url_for('terms_conditions') }}">
                             <span class="btn-caption">Terms & conditions</span>
                             <i class="ph ph-arrow-right"></i>
                         </a>

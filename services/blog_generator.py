@@ -43,8 +43,7 @@ class BlogPostGenerationService:
                 )
 
                 # Save to database
-                db.session.add(blog_post)
-                db.session.commit()
+                blog_post.save()
 
                 # Update generator statistics
                 generator.last_generated = datetime.utcnow()
@@ -56,7 +55,7 @@ class BlogPostGenerationService:
                 elif generator.schedule_type == 'once':
                     generator.next_scheduled = None
 
-                db.session.commit()
+                generator.save()
 
                 return blog_post
 

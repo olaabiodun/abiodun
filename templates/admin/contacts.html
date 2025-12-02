@@ -1,0 +1,88 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Contact Messages</h1>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Name</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Project Type</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+            <tr class="{{ 'fw-bold' if not contact.read else '' }}">
+                <td>{{ contact.created_at[:10] }}</td>
+                <td>{{ contact.name }}</td>
+                <td>{{ contact.subject }}</td>
+                <td>{{ contact.project_type }}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#contactModal{{ contact.id }}">
+                        View
+                    </button>
+                    <form action="{{ url_for('admin_delete_contact', contact_id=contact.id) }}" method="POST"
+                        class="d-inline" onsubmit="return confirm('Are you sure you want to delete this message?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Modal -->
+            <div class="modal fade" id="contactModal{{ contact.id }}" tabindex="-1"
+                aria-labelledby="contactModalLabel{{ contact.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="contactModalLabel{{ contact.id }}">Message from {{ contact.name
+                                }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Date:</strong> {{ contact.created_at }}<br>
+                                    <strong>Phone:</strong> {{ contact.phone or 'N/A' }}<br>
+                                    <strong>Company:</strong> {{ contact.company or 'N/A' }}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Project Type:</strong> {{ contact.project_type or 'N/A' }}<br>
+                                    <strong>Budget:</strong> {{ contact.budget_range or 'N/A' }}<br>
+                                    <strong>Timeline:</strong> {{ contact.timeline or 'N/A' }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Subject:</strong> {{ contact.subject }}
+                            </div>
+                            <div class="mb-3">
+                                <strong>Message:</strong>
+                                <p class="p-3 bg-light border rounded">{{ contact.message }}</p>
+                            </div>
+                            {% if contact.newsletter_signup %}
+                            <div class="alert alert-info py-2">
+                                <i class="bi bi-envelope-check"></i> User requested newsletter subscription
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No messages found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

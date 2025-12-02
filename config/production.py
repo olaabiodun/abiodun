@@ -2,7 +2,7 @@
 import os
 
 # Production database with connection pooling
-SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://user:password@localhost/portfolio_prod')
+SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://postgres:<your_password>@db.jpqmcqeextxdaqfhzeqb.supabase.co:5432/postgres')
 
 # Redis for caching (recommended for production)
 CACHE_TYPE = 'redis'

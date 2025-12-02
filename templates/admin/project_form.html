@@ -1,0 +1,165 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ 'Edit' if project else 'Add' }} Project</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('admin_projects') }}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">Basic Information</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control") }}
+                        {% for error in form.title.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.slug.label(class="form-label") }}
+                        {{ form.slug(class="form-control") }}
+                        {% for error in form.slug.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label") }}
+                        {{ form.description(class="form-control", rows=5) }}
+                        {% for error in form.description.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.excerpt.label(class="form-label") }}
+                        {{ form.excerpt(class="form-control", rows=3) }}
+                        {% for error in form.excerpt.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">Case Study Details</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        {{ form.challenge_summary.label(class="form-label") }}
+                        {{ form.challenge_summary(class="form-control", rows=2) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.challenge_description.label(class="form-label") }}
+                        {{ form.challenge_description(class="form-control", rows=4) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.solution_summary.label(class="form-label") }}
+                        {{ form.solution_summary(class="form-control", rows=2) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.solution_description.label(class="form-label") }}
+                        {{ form.solution_description(class="form-control", rows=4) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">Classification</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        {{ form.category.label(class="form-label") }}
+                        {{ form.category(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.industry.label(class="form-label") }}
+                        {{ form.industry(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.services.label(class="form-label") }}
+                        {{ form.services(class="form-control") }}
+                        <div class="form-text">Comma-separated values</div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.tags.label(class="form-label") }}
+                        {{ form.tags(class="form-control") }}
+                        <div class="form-text">Comma-separated values</div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        {{ form.featured(class="form-check-input") }}
+                        {{ form.featured.label(class="form-check-label") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">Client Info</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        {{ form.client.label(class="form-label") }}
+                        {{ form.client(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.client_name.label(class="form-label") }}
+                        {{ form.client_name(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.client_role.label(class="form-label") }}
+                        {{ form.client_role(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.client_company.label(class="form-label") }}
+                        {{ form.client_company(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.client_company_url.label(class="form-label") }}
+                        {{ form.client_company_url(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.client_feedback.label(class="form-label") }}
+                        {{ form.client_feedback(class="form-control", rows=3) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">Links & Media</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        {{ form.image_url.label(class="form-label") }}
+                        {{ form.image_url(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.github_url.label(class="form-label") }}
+                        {{ form.github_url(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.live_url.label(class="form-label") }}
+                        {{ form.live_url(class="form-control") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                {{ form.submit(class="btn btn-primary btn-lg") }}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

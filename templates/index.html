@@ -135,24 +135,18 @@
                     <div
                       class="mxd-project-item__preview preview-image-{{ loop.index }} parallax-img-small"
                     >
-                      <div
-                        class="mxd-project-cards__inner align-center bg-light radius-m"
-                      >
+                      <div class="mxd-project-cards__inner align-center bg-light radius-m" style="width: 100%; padding: 0; overflow: hidden;">
                         <img
                           src="{{ project.image_url }}"
                           alt="{{ project.title }} Main Image"
-                          style="max-width: 100%; height: 100%"
+                          style="width: 100%; height: 100%; display: block; object-fit: cover;"
                           loading="lazy"
                           decoding="async"
                         />
                       </div>
                     </div>
                     <div class="mxd-project-item__tags">
-                      {% for tag in project.get_tags_list() %}
-                      <span class="tag tag-default tag-permanent"
-                        >{{ tag }}</span
-                      >
-                      {% endfor %}
+                      
                     </div>
                   </a>
                   <div class="mxd-project-item__promo">
@@ -641,21 +635,21 @@
       <div class="mxd-blog-preview">
         <div class="container-fluid p-0">
           <div class="row g-0">
-            {% for post in posts %}
+            {% for blog in blogs %}
             <!-- item -->
             <div
               class="col-12 col-xl-4 mxd-blog-preview__item mxd-grid-item animate-card-3"
             >
               <a
                 class="mxd-blog-preview__media"
-                href="{{ url_for('blog_article', slug=post.slug) }}"
+                href="{{ url_for('blog_article', slug=blog.slug) }}"
               >
                 <div
                   class="mxd-blog-preview__image blog-preview-image-{{ loop.index }} parallax-img-small"
                 >
-                  <img
+                  <img 
                     class="parallax-img-small"
-                    src="{{ url_for('static', filename=post.featured_image) }}"
+                    src="{{ blog.featured_image }}" 
                     alt="Blog Preview Image"
                   />
                 </div>
@@ -668,16 +662,25 @@
                   </i>
                 </div>
                 <div class="mxd-blog-preview__tags">
-                  {% for tag in post.get_tags_list() %}
-                  <span class="tag tag-default tag-permanent">{{ tag }}</span>
-                  {% endfor %}
+                  {% if blog.tags %}
+                    {% if blog.tags is string %}
+                      {% set tag_list = blog.tags.split(',') %}
+                    {% else %}
+                      {% set tag_list = blog.tags %}
+                    {% endif %}
+                    {% for tag in tag_list %}
+                      {% if tag %}
+                        <span class="tag tag-default tag-permanent">{{ tag.strip() if tag is string else tag }}</span>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
                 </div>
               </a>
               <div class="mxd-blog-preview__data">
                 <a
                   class="anim-uni-in-up"
-                  href="{{ url_for('blog_article', slug=post.slug) }}"
-                  >{{ post.title }}</a
+                  href="{{ url_for('blog_article', slug=blog.slug) }}"
+                  >{{ blog.title }}</a
                 >
               </div>
             </div>

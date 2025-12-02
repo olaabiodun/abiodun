@@ -1,89 +1,34 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-from forms import ContactForm
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_mail import Mail, Message
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, current_app
 from flask_caching import Cache
-from flask_compress import Compress
-from models import db, Project, BlogPost, ContactMessage, NewsletterSubscriber
+from dotenv import load_dotenv
 import os
-from datetime import datetime
+from supabase import create_client, Client
+from forms import ProjectForm, BlogForm, ContactForm
+from datetime import datetime, timedelta
+import json
 
 app = Flask(__name__)
-app.secret_key = '669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'  # Change this to a random secret key
 
-# Performance and Optimization Configuration
-app.config['CACHE_TYPE'] = os.environ.get('CACHE_TYPE', 'simple')
-app.config['CACHE_DEFAULT_TIMEOUT'] = int(os.environ.get('CACHE_DEFAULT_TIMEOUT', 300))
-app.config['COMPRESS_ENABLED'] = os.environ.get('COMPRESS_ENABLED', 'True').lower() == 'true'
+# Configure cache
+cache = Cache(config={
+    'CACHE_TYPE': 'SimpleCache',  # In-memory cache
+    'CACHE_DEFAULT_TIMEOUT': 60,  # 1 minute cache timeout
+    'CACHE_THRESHOLD': 1000  # Maximum number of items the cache will store
+})
+cache.init_app(app)
 
-# CDN Configuration
-CDN_URL = os.environ.get('CDN_URL', '')
-if CDN_URL:
-    app.config['STATIC_URL_PATH'] = CDN_URL
-    from flask import url_for
-    @app.context_processor
-    def override_url_for():
-        return dict(url_for=cdn_url_for)
+def make_cache_key(*args, **kwargs):
+    """Create a cache key from the request path and query parameters."""
+    path = request.path     
+    args_pairs = [(k, v) for k, v in request.args.items()]
+    args_pairs.sort()
+    return f"{path}:{json.dumps(args_pairs)}"
 
-def cdn_url_for(endpoint, **values):
-    """Generate CDN URLs for static files"""
-    if endpoint == 'static':
-        if CDN_URL:
-            return CDN_URL.rstrip('/') + url_for(endpoint, **values)
-    return url_for(endpoint, **values)
+load_dotenv()
 
-# Database optimization
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    'pool_pre_ping': True,
-    'pool_recycle': 300,
-    'pool_timeout': 20,
-    'pool_size': 10,
-    'max_overflow': 20
-}
+app.secret_key = '669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'
 
-# Contact Information
-app.config['CONTACT_EMAIL'] = os.environ.get('CONTACT_EMAIL', 'contact@example.com')
-app.config['CONTACT_PHONE'] = os.environ.get('CONTACT_PHONE', '+1 234 567 890')
-app.config['CONTACT_LOCATION'] = os.environ.get('CONTACT_LOCATION', 'New York, USA')
-app.config['CONTACT_AVAILABILITY'] = os.environ.get('CONTACT_AVAILABILITY', 'Available for projects')
-
-# Email configuration
-app.config['STATIC_FOLDER'] = 'static'
-app.config['TEMPLATE_FOLDER'] = 'templates'
-# Handle both PostgreSQL and SQLite database URLs
-uri = os.environ.get('DATABASE_URL', 'sqlite:///portfolio.db')
-# Fix for Render's PostgreSQL URL format
-if uri and uri.startswith('postgres://'):
-    uri = uri.replace('postgres://', 'postgresql://', 1)
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', 'your-email@gmail.com')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', 'your-app-password')
-
-# Initialize extensions
-db.init_app(app)
-migrate = Migrate(app, db)
-mail = Mail(app)
-
-# Initialize performance extensions
-cache = Cache(app)
-compress = Compress(app)
-
-# Import and initialize admin panel
-from admin import init_admin
-
-# Initialize Flask-Admin
-admin = init_admin(app)
-
-# Import and initialize blog scheduler
-from services.blog_scheduler import init_scheduler
-
-# Initialize blog post generation scheduler
-blog_scheduler = init_scheduler(app)
+supabase: Client = create_client(os.getenv('SUPABASE_URL'), os.getenv('SUPABASE_ANON_KEY'))
 
 # Error handlers
 @app.errorhandler(404)
@@ -96,105 +41,242 @@ def internal_server_error(e):
 
 # Routes
 @app.route('/')
-@cache.cached(timeout=300)  # Cache for 5 minutes
+@cache.cached(timeout=60, key_prefix='index_page')  # Cache for 1 minute
 def index():
-    """Home page - Personal Portfolio"""
-    featured_projects = Project.query.filter_by(featured=True).limit(3).all()
-    recent_posts = BlogPost.query.filter_by(published=True).order_by(BlogPost.created_at.desc()).limit(3).all()
-    return render_template('index.html', projects=featured_projects, posts=recent_posts)
+    try:
+        # Try to get projects from cache first
+        projects = cache.get('projects_list')
+        if projects is None:
+            response = supabase.table('projects').select('*').execute()
+            projects = response.data if response.data else []
+            cache.set('projects_list', projects, timeout=60)  # Cache for 1 minute
+            
+        # Try to get blogs from cache
+        blogs = cache.get('blogs_list')
+        if blogs is None:
+            response = supabase.table('blog_posts').select('*').order('created_at', desc=True).limit(3).execute()
+            blogs = response.data if response.data else []
+            cache.set('blogs_list', blogs, timeout=60)  # Cache for 1 minute
+            
+    except Exception as e:
+        current_app.logger.error(f"Error in index route: {e}")
+        projects = []
+        blogs = []
+        
+    return render_template('index.html', projects=projects, blogs=blogs)
 
-@app.route('/admin/')
+@app.route('/admin/dashboard')
 def admin_dashboard():
-    stats = {
-        'total_projects': Project.query.count(),
-        'featured_projects': Project.query.filter_by(featured=True).count(),
-        # Add more stats as needed
-    }
-    return render_template('admin/dashboard.html', stats=stats)
+    try:
+        p_res = supabase.table('projects').select('id', count='exact').execute()
+        project_count = p_res.count if p_res.count is not None else len(p_res.data)
+        b_res = supabase.table('blog_posts').select('id', count='exact').execute()
+        blog_count = b_res.count if b_res.count is not None else len(b_res.data)
+        c_res = supabase.table('contacts').select('id', count='exact').execute()
+        contact_count = c_res.count if c_res.count is not None else len(c_res.data)
+    except Exception as e:
+        current_app.logger.error(f"Dashboard stats error: {e}")
+        project_count = blog_count = contact_count = 0
+    return render_template('admin/dashboard.html', project_count=project_count, blog_count=blog_count, contact_count=contact_count)
 
 @app.route('/contact')
 def contact():
-    """Contact page"""
     form = ContactForm()
-    return render_template('contact.html', 
-                         form=form,
-                         active_page='contact')
+    return render_template('contact.html', form=form, active_page='contact')
 
 @app.route('/works')
-@cache.cached(timeout=300)
+@cache.cached(timeout=60, key_prefix='works_page')  # Cache for 1 minute
 def works():
-    """Works/Portfolio page"""
-    category = request.args.get('category', 'all')
-    search = request.args.get('search', '')
-    
-    query = Project.query
-    
-    if category != 'all':
-        query = query.filter_by(category=category)
-    
-    if search:
-        query = query.filter(Project.title.contains(search) | Project.description.contains(search))
-    
-    projects = query.order_by(Project.created_at.desc()).all()
-    categories = db.session.query(Project.category.distinct()).all()
-    
-    return render_template('works-simple.html', projects=projects, categories=categories, current_category=category, search_query=search)
+    try:
+        projects = cache.get('all_projects')
+        if projects is None:
+            response = supabase.table('projects').select('*').execute()
+            projects = response.data if response.data else []
+            cache.set('all_projects', projects, timeout=60)  # Cache for 1 minute
+    except Exception as e:
+        current_app.logger.error(f"Error fetching works projects: {e}")
+        projects = []
+    return render_template('works-simple.html', projects=projects)
 
 @app.route('/works-masonry')
 def works_masonry():
-    """Works Masonry page"""
-    return render_template('works-masonry.html')
+    # For simplicity, reuse works view
+    return works()
 
 @app.route('/about')
 def about():
-    """About page"""
     return render_template('about.html')
 
+@app.route('/privacy-policy')
+def privacy_policy():
+    return render_template('privacy-policy.html')
+
+@app.route('/terms-conditions')
+def terms_conditions():
+    return render_template('terms-conditions.html')
+
 @app.route('/blog')
-@cache.cached(timeout=300)
+@cache.cached(timeout=1, key_prefix=make_cache_key)
 def blog():
-    """Blog page"""
-    page = request.args.get('page', 1, type=int)
-    per_page = 5 # Adjust per_page for the main grid
-
-    # Get the most recent featured post
-    featured_post = BlogPost.query.filter_by(published=True, featured=True)        .order_by(BlogPost.created_at.desc()).first()
-
-    # Get paginated regular posts, excluding the featured one if it exists
-    posts_query = BlogPost.query.filter_by(published=True)
-    if featured_post:
-        posts_query = posts_query.filter(BlogPost.id != featured_post.id)
-
-    posts = posts_query.order_by(BlogPost.created_at.desc())        .paginate(page=page, per_page=per_page, error_out=False)
-
+    try:
+        # Try to get blog posts from cache first
+        cache_key = 'blog_posts_all'
+        posts = cache.get(cache_key)
+        
+        if posts is None:
+            response = supabase.table('blog_posts').select('*').order('created_at', desc=True).execute()
+            posts = response.data if response.data else []
+            
+            # Convert created_at strings to datetime objects
+            for post in posts:
+                if isinstance(post.get('created_at'), str):
+                    try:
+                        post['created_at'] = datetime.fromisoformat(post['created_at'])
+                    except Exception:
+                        pass
+            
+            # Cache the processed posts
+            cache.set(cache_key, posts, timeout=600)  # Cache for 10 minutes
+        
+        # Assume first post as featured if exists
+        featured_post = posts[0] if posts else None
+        
+    except Exception as e:
+        current_app.logger.error(f"Error fetching blog posts: {e}")
+        posts = []
+        featured_post = None
+        
     return render_template('blog-creative.html', featured_post=featured_post, posts=posts)
 
 @app.route('/blog/<slug>')
-@cache.cached(timeout=300)
 def blog_article(slug):
-    """Blog article page"""
-    post = BlogPost.query.filter_by(slug=slug, published=True).first_or_404()
-    related_posts = BlogPost.query.filter(BlogPost.id != post.id, BlogPost.published == True)\
-        .order_by(BlogPost.created_at.desc()).limit(3).all()
-    return render_template('blog-article.html', post=post, related_posts=related_posts)
+    try:
+        # Try to get the article from cache
+        cache_key = f'blog_article_{slug}'
+        post = cache.get(cache_key)
+        
+        if post is None:
+            post_resp = supabase.table('blog_posts').select('*').eq('slug', slug).execute()
+            post = post_resp.data[0] if post_resp.data else None
+            
+            if post and isinstance(post.get('created_at'), str):
+                try:
+                    post['created_at'] = datetime.fromisoformat(post['created_at'])
+                except Exception:
+                    pass
+            
+            if post:  # Only cache if we found the post
+                cache.set(cache_key, post, timeout=60)  # Cache for 1 minute
+        
+        # Get related posts (cached separately)
+        related_cache_key = 'related_posts_all'
+        related_posts = cache.get(related_cache_key)
+        
+        if related_posts is None:
+            related_resp = supabase.table('blog_posts').select('*').neq('slug', slug).order('created_at', desc=True).limit(3).execute()
+            related_posts = related_resp.data if related_resp.data else []
+            
+            # Convert dates for related posts
+            for p in related_posts:
+                if p and isinstance(p.get('created_at'), str):
+                    try:
+                        p['created_at'] = datetime.fromisoformat(p['created_at'])
+                    except Exception:
+                        pass
+            
+            cache.set(related_cache_key, related_posts, timeout=60)  # Cache for 1 minute
+        
+        # Get previous and next posts for navigation
+        all_posts_resp = supabase.table('blog_posts').select('id, slug, title, created_at').order('created_at', desc=True).execute()
+        all_posts = all_posts_resp.data if all_posts_resp.data else []
+        
+        # Find current post index
+        current_index = next((i for i, p in enumerate(all_posts) if p['id'] == post['id']), -1)
+        
+        # Get previous and next posts
+        prev_post = all_posts[current_index + 1] if current_index < len(all_posts) - 1 else None
+        next_post = all_posts[current_index - 1] if current_index > 0 else None
+        
+    except Exception as e:
+        current_app.logger.error(f"Error fetching blog article: {e}")
+        post = None
+        related_posts = []
+        prev_post = None
+        next_post = None
+    
+    return render_template('blog-article.html', 
+                         post=post, 
+                         related_posts=related_posts,
+                         prev_post=prev_post,
+                         next_post=next_post)
 
-@app.route('/project/<int:project_id>')
-@cache.cached(timeout=300)
+@app.route('/project/<project_id>')
 def project_details(project_id):
-    """Project details page"""
-    project = Project.query.get_or_404(project_id)
-    related_projects = Project.query.filter(Project.id != project.id, Project.category == project.category)\
-        .limit(3).all()
-    return render_template('project-details.html', project=project, related_projects=related_projects)
+    try:
+        # Get the current project
+        proj_resp = supabase.table('projects').select('*').eq('id', project_id).execute()
+        project = proj_resp.data[0] if proj_resp.data else None
+        
+        if project:
+            # Convert created_at to datetime if it's a string
+            if isinstance(project.get('created_at'), str):
+                try:
+                    project['created_at'] = datetime.fromisoformat(project['created_at'])
+                except Exception:
+                    pass
+            
+            # Get all projects ordered by created_at (newest first)
+            all_projects_resp = supabase.table('projects').select('id, slug, title, created_at').order('created_at', desc=True).execute()
+            all_projects = all_projects_resp.data if all_projects_resp.data else []
+            
+            # Find current project index
+            current_index = next((i for i, p in enumerate(all_projects) if p['id'] == project['id']), -1)
+            
+            # Get previous and next projects
+            prev_project = all_projects[current_index + 1] if current_index < len(all_projects) - 1 else None
+            next_project = all_projects[current_index - 1] if current_index > 0 else None
+            
+            # Get related projects (excluding current and nav projects)
+            related_ids = {p['id'] for p in [prev_project, next_project] if p}
+            related_ids.add(project['id'])
+            related_resp = supabase.table('projects')\
+                .select('*')\
+                .not_.in_('id', list(related_ids))\
+                .limit(3)\
+                .execute()
+            related_projects = related_resp.data if related_resp.data else []
+            
+            # Convert created_at for related projects
+            for rp in related_projects:
+                if isinstance(rp.get('created_at'), str):
+                    try:
+                        rp['created_at'] = datetime.fromisoformat(rp['created_at'])
+                    except Exception:
+                        pass
+        else:
+            prev_project = None
+            next_project = None
+            related_projects = []
+            
+    except Exception as e:
+        current_app.logger.error(f"Error fetching project details: {e}")
+        project = None
+        related_projects = []
+        prev_project = None
+        next_project = None
+        
+    return render_template('project-details.html', 
+                         project=project, 
+                         related_projects=related_projects,
+                         prev_project=prev_project,
+                         next_project=next_project)
 
 @app.route('/faq')
 def faq():
-    """FAQ page"""
     return render_template('faq.html')
 
 @app.route('/404')
 def error_404():
-    """404 Error page"""
     return render_template('404.html')
 
 # Contact form handler
@@ -202,234 +284,271 @@ def error_404():
 def submit_contact():
     form = ContactForm()
     if form.validate_on_submit():
+        contact_data = {
+            'name': form.name.data,
+            'email': form.email.data,
+            'subject': form.subject.data if hasattr(form, 'subject') else 'Contact Form Submission',
+            'message': form.message.data,
+            'phone': form.phone.data if hasattr(form, 'phone') else '',
+            'company': form.company.data if hasattr(form, 'company') else '',
+            'project_type': form.project_type.data if hasattr(form, 'project_type') else '',
+            'budget_range': form.budget_range.data if hasattr(form, 'budget_range') else '',
+            'timeline': form.timeline.data if hasattr(form, 'timeline') else '',
+            'newsletter_signup': form.newsletter_signup.data if hasattr(form, 'newsletter_signup') else False
+        }
+        
         try:
-            # Create new contact message
-            contact = ContactMessage(
-                name=form.name.data,
-                email=form.email.data,
-                message=form.message.data
-            )
-            db.session.add(contact)
-            db.session.commit()
-
-            # Send email notification
-            msg = Message('New Contact Form Submission',
-                        sender=app.config['MAIL_USERNAME'],
-                        recipients=[app.config['CONTACT_EMAIL']])
-            msg.body = f"""
-            New contact form submission:
-            
-            Name: {form.name.data}
-            Email: {form.email.data}
-            Message: {form.message.data}
-            """
-            mail.send(msg)
-
-            flash('Thank you! Your message has been sent successfully.', 'success')
+            result = supabase.table('contacts').insert(contact_data).execute()
+            if hasattr(result, 'error') and result.error:
+                return jsonify({'success': False, 'message': str(result.error)}), 400
+            return jsonify({'success': True, 'message': 'Thank you for your message! We will get back to you soon.'})
         except Exception as e:
-            app.logger.error(f'Error in contact form: {str(e)}')
-            db.session.rollback()
-            flash('Oops! Something went wrong. Please try again later.', 'error')
+            current_app.logger.error(f"Error saving contact: {str(e)}")
+            return jsonify({'success': False, 'message': 'An error occurred while saving your message.'}), 500
     else:
-        for field, errors in form.errors.items():
-            for error in errors:
-                flash(f'{field}: {error}', 'error')
-    
-    return redirect(url_for('contact'))
+        return jsonify({
+            'success': False,
+            'errors': form.errors,
+            'message': 'Please correct the errors in the form.'
+        })
 
 # Newsletter subscription handler
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
-    """Handle newsletter subscription"""
-    email = request.form.get('email')
-    
-    # Check if email already exists
-    existing = NewsletterSubscriber.query.filter_by(email=email).first()
-    if existing:
-        if existing.subscribed:
-            return jsonify({'status': 'warning', 'message': 'Email already subscribed!'})
-        else:
-            existing.subscribed = True
-            db.session.commit()
-            return jsonify({'status': 'success', 'message': 'Successfully resubscribed!'})
-    
-    # Add new subscriber
-    subscriber = NewsletterSubscriber(email=email)
-    db.session.add(subscriber)
-    db.session.commit()
-    
-    return jsonify({'status': 'success', 'message': 'Successfully subscribed!'})
+    return jsonify({'status': 'info', 'message': 'Subscription logic removed.'})
 
-# Blog generation routes
-@app.route('/admin/generate-blog-post/<int:generator_id>')
-def generate_blog_post(generator_id):
-    """Manually trigger blog post generation for a specific generator"""
-    from services.blog_generator import BlogPostGenerationService
-
+# Admin Project Routes
+@app.route('/admin/projects')
+def admin_projects():
     try:
-        generator = BlogPostGenerator.query.get_or_404(generator_id)
-        if not generator.is_active:
-            flash(f'Generator "{generator.name}" is not active', 'error')
-            return redirect(url_for('blogpostgenerator.index_view'))
-
-        service = BlogPostGenerationService()
-        blog_post = service.generate_blog_post(generator)
-
-        flash(f'Successfully generated blog post: "{blog_post.title}"', 'success')
-        return redirect(url_for('blogpost.index_view'))
-
+        resp = supabase.table('projects').select('*').order('created_at', desc=True).execute()
+        projects = resp.data if resp.data else []
     except Exception as e:
-        flash(f'Error generating blog post: {str(e)}', 'error')
-        return redirect(url_for('blogpostgenerator.index_view'))
+        flash(f"Error fetching projects: {e}", "error")
+        projects = []
+    return render_template('admin/projects.html', projects=projects)
 
-@app.route('/admin/test-gemini')
-def test_gemini():
-    """Test Gemini API connection"""
-    from services.blog_generator import BlogPostGenerationService
+@app.route('/admin/projects/add', methods=['GET', 'POST'])
+def admin_add_project():
+    form = ProjectForm()
+    if form.validate_on_submit():
+        project_data = {
+            'title': form.title.data,
+            'slug': form.slug.data,
+            'description': form.description.data,
+            'excerpt': form.excerpt.data,
+            'client': form.client.data,
+            'services': [s.strip() for s in form.services.data.split(',')] if form.services.data else [],
+            'industry': form.industry.data,
+            'tags': [t.strip() for t in form.tags.data.split(',')] if form.tags.data else [],
+            'challenge_summary': form.challenge_summary.data,
+            'challenge_description': form.challenge_description.data,
+            'solution_summary': form.solution_summary.data,
+            'solution_description': form.solution_description.data,
+            'client_feedback': form.client_feedback.data,
+            'client_name': form.client_name.data,
+            'client_role': form.client_role.data,
+            'client_company': form.client_company.data,
+            'client_company_url': form.client_company_url.data,
+            'image_url': form.image_url.data,
+            'github_url': form.github_url.data,
+            'live_url': form.live_url.data,
+            'category': form.category.data,
+            'featured': form.featured.data,
+        }
+        try:
+            supabase.table('projects').insert(project_data).execute()
+            flash('Project added successfully!', 'success')
+            return redirect(url_for('admin_projects'))
+        except Exception as e:
+            if "10035" in str(e):
+                flash('Project added successfully! (Socket warning ignored)', 'success')
+                return redirect(url_for('admin_projects'))
+            flash(f'Error adding project: {str(e)}', 'error')
+    return render_template('admin/project_form.html', form=form, project=None)
 
+@app.route('/admin/projects/<project_id>/edit', methods=['GET', 'POST'])
+def admin_edit_project(project_id):
     try:
-        service = BlogPostGenerationService()
-        success, message = service.test_connection()
-
-        if success:
-            flash(f'Gemini API connection successful: {message}', 'success')
-        else:
-            flash(f'Gemini API connection failed: {message}', 'error')
-
+        resp = supabase.table('projects').select('*').eq('id', project_id).execute()
+        if not resp.data:
+            flash('Project not found', 'error')
+            return redirect(url_for('admin_projects'))
+        project = resp.data[0]
+        form = ProjectForm()
+        if form.validate_on_submit():
+            update_data = {
+                'title': form.title.data,
+                'slug': form.slug.data,
+                'description': form.description.data,
+                'excerpt': form.excerpt.data,
+                'client': form.client.data,
+                'services': [s.strip() for s in form.services.data.split(',')] if form.services.data else [],
+                'industry': form.industry.data,
+                'tags': [t.strip() for t in form.tags.data.split(',')] if form.tags.data else [],
+                'challenge_summary': form.challenge_summary.data,
+                'challenge_description': form.challenge_description.data,
+                'solution_summary': form.solution_summary.data,
+                'solution_description': form.solution_description.data,
+                'client_feedback': form.client_feedback.data,
+                'client_name': form.client_name.data,
+                'client_role': form.client_role.data,
+                'client_company': form.client_company.data,
+                'client_company_url': form.client_company_url.data,
+                'image_url': form.image_url.data,
+                'github_url': form.github_url.data,
+                'live_url': form.live_url.data,
+                'category': form.category.data,
+                'featured': form.featured.data,
+            }
+            try:
+                supabase.table('projects').update(update_data).eq('id', project_id).execute()
+                flash('Project updated successfully!', 'success')
+                return redirect(url_for('admin_projects'))
+            except Exception as e:
+                if "10035" in str(e):
+                    flash('Project updated successfully! (Socket warning ignored)', 'success')
+                    return redirect(url_for('admin_projects'))
+                flash(f'Error updating project: {str(e)}', 'error')
+        # Populate form on GET
+        if request.method == 'GET':
+            for field in form:
+                if field.name in project and project[field.name] is not None:
+                    if field.name in ['tags', 'services'] and isinstance(project[field.name], list):
+                        field.data = ', '.join(project[field.name])
+                    else:
+                        field.data = project[field.name]
+        return render_template('admin/project_form.html', form=form, project=project)
     except Exception as e:
-        flash(f'Error testing Gemini API: {str(e)}', 'error')
+        flash(f'Error loading project: {str(e)}', 'error')
+        return redirect(url_for('admin_projects'))
 
-@app.route('/health')
-@cache.cached(timeout=60)
-def health_check():
-    """Health check endpoint for monitoring"""
-    return jsonify({
-        'status': 'healthy',
-        'timestamp': datetime.utcnow().isoformat(),
-        'cache_enabled': cache is not None,
-        'compression_enabled': compress is not None
-    })
+@app.route('/admin/projects/<project_id>/delete', methods=['POST'])
+def admin_delete_project(project_id):
+    try:
+        supabase.table('projects').delete().eq('id', project_id).execute()
+        flash('Project deleted successfully!', 'success')
+    except Exception as e:
+        if "10035" in str(e):
+            flash('Project deleted successfully! (Socket warning ignored)', 'success')
+        else:
+            flash(f'Error deleting project: {str(e)}', 'error')
+    return redirect(url_for('admin_projects'))
 
-@app.route('/performance')
-def performance_stats():
-    """Performance statistics endpoint"""
-    stats = {
-        'cache_hits': cache.get('cache_hits', 0),
-        'cache_misses': cache.get('cache_misses', 0),
-        'total_requests': cache.get('total_requests', 0)
-    }
-    return jsonify(stats)
-with app.app_context():
-    db.create_all()
-    
-    # Add sample data if database is empty
-    if Project.query.count() == 0:
-        sample_projects = [
-            Project(
-                title="Devpulse AI",
-                slug="devpulse-ai",
-                description="A powerful VS Code extension that leverages Gemini AI to enhance development productivity through intelligent code suggestions, automated documentation, and smart debugging assistance.",
-                excerpt="VS Code Extension powered by Gemini AI",
-                client="Tech Startup Inc.",
-                services="AI Integration, VS Code Extension Development, API Development",
-                industry="Technology",
-                tags="VS Code Extension, Gemini AI, Python, JavaScript",
-                challenge_summary="Developers needed an AI-powered coding assistant that could understand context and provide intelligent suggestions within VS Code.",
-                challenge_description="The main challenge was integrating Gemini AI seamlessly into the VS Code environment while maintaining performance and providing accurate, context-aware suggestions across multiple programming languages.",
-                solution_summary="Built a comprehensive VS Code extension with real-time AI assistance.",
-                solution_description="Developed a robust extension architecture that leverages Gemini AI's capabilities to provide intelligent code completion, documentation generation, and debugging assistance. The solution includes real-time code analysis, multi-language support, and seamless integration with existing development workflows.",
-                client_feedback="The AI integration has significantly improved our development team's productivity. The intelligent suggestions and automated documentation features have reduced development time by 40%.",
-                client_name="Sarah Johnson",
-                client_role="CTO",
-                client_company="Tech Startup Inc.",
-                client_company_url="https://techstartup.com",
-                image_url="/static/img/works/preview/Microsoft.VisualStudio.Services.Icons.png",
-                github_url="https://github.com/example/devpulse-ai",
-                live_url="https://marketplace.visualstudio.com/items?itemName=devpulse-ai",
-                category="web",
-                featured=True
-            ),
-            Project(
-                title="Websage AI",
-                slug="websage-ai",
-                description="AI-powered web scraping tool that intelligently extracts data from websites using advanced machine learning algorithms.",
-                excerpt="AI for scraping data from websites",
-                client="Data Analytics Corp",
-                services="AI Development, Web Scraping, Machine Learning, Data Processing",
-                industry="Data Analytics",
-                tags="Flask/Python, JavaScript, AI Agentic",
-                challenge_summary="Need for intelligent web scraping that can handle dynamic content and complex data structures.",
-                challenge_description="Traditional web scraping tools couldn't handle modern websites with dynamic content, anti-bot measures, and complex data structures. We needed an AI-powered solution that could understand website layouts and extract data intelligently.",
-                solution_summary="Developed an AI-powered web scraping platform with intelligent data extraction.",
-                solution_description="Created Websage AI, a comprehensive web scraping platform that uses machine learning to understand website structures, handle dynamic content, and extract data intelligently. The platform includes anti-detection measures, data validation, and export capabilities in multiple formats.",
-                client_feedback="Websage AI has revolutionized our data collection process. The intelligent scraping capabilities and anti-detection features have improved our success rate by 85%.",
-                client_name="Michael Chen",
-                client_role="Head of Data",
-                client_company="Data Analytics Corp",
-                client_company_url="https://data-analytics-corp.com",
-                image_url="/static/img/works/preview/1200x800_prv-02.webp",
-                github_url="https://github.com/example/websage-ai",
-                live_url="https://websage-ai.com",
-                category="web",
-                featured=True
-            ),
-            Project(
-                title="Delivery Service App",
-                slug="delivery-service-app",
-                description="Mobile application for food delivery service with real-time tracking, payment integration, and user management.",
-                excerpt="Mobile app design for food delivery",
-                client="QuickEats Delivery",
-                services="Mobile App Development, UI/UX Design, Payment Integration",
-                industry="Food Delivery",
-                tags="UI/UX, Mobile, Flutter, Firebase",
-                challenge_summary="Create a seamless food delivery experience with real-time tracking and easy payment options.",
-                challenge_description="The food delivery market is highly competitive, requiring an app that offers exceptional user experience, real-time order tracking, secure payment processing, and efficient delivery management. The challenge was to build an intuitive interface that works perfectly for both customers and delivery drivers.",
-                solution_summary="Designed and developed a comprehensive mobile app for food delivery services.",
-                solution_description="Created a feature-rich mobile application with real-time GPS tracking, integrated payment systems, user-friendly interface, and comprehensive order management. The app includes customer app, driver app, and admin panel with real-time analytics and reporting.",
-                client_feedback="The app has exceeded our expectations. The real-time tracking and intuitive interface have significantly improved customer satisfaction and operational efficiency.",
-                client_name="Emma Rodriguez",
-                client_role="Operations Manager",
-                client_company="QuickEats Delivery",
-                client_company_url="https://quickeats.com",
-                image_url="/static/img/works/preview/1200x800_prv-03.webp",
-                github_url="https://github.com/example/delivery-app",
-                live_url="https://delivery-app-demo.com",
-                category="mobile",
-                featured=True
-            )
-        ]
-        
-        for project in sample_projects:
-            db.session.add(project)
-        
-        # Add sample blog posts
-        sample_posts = [
-            BlogPost(
-                title="Frontend innovations and user journeys",
-                slug="frontend-innovations-user-journeys",
-                content="Exploring the latest trends in frontend development and how they impact user experience design...",
-                excerpt="Exploring the latest trends in frontend development and how they impact user experience design.",
-                featured_image="img/blog/1000x1250_psec-01.webp",
-                tags="Frontend, React, JavaScript",
-                published=True,
-                featured=True
-            ),
-            BlogPost(
-                title="Branding in creating digital experiences",
-                slug="branding-digital-experiences",
-                content="How effective branding strategies can enhance digital user experiences and build stronger connections...",
-                excerpt="How effective branding strategies can enhance digital user experiences and build stronger connections.",
-                featured_image="img/blog/1000x1250_psec-02.webp",
-                tags="UI/UX, Design, Branding",
-                published=True,
-                featured=False
-            )
-        ]
-        
-        for post in sample_posts:
-            db.session.add(post)
-        
-        db.session.commit()
+# Admin Blog Routes (list, add, edit, delete) – simplified placeholders
+@app.route('/admin/blogs')
+def admin_blogs():
+    try:
+        resp = supabase.table('blog_posts').select('*').order('created_at', desc=True).execute()
+        blogs = resp.data if resp.data else []
+    except Exception as e:
+        flash(f"Error fetching blogs: {e}", "error")
+        blogs = []
+    return render_template('admin/blogs.html', blogs=blogs)
+
+@app.route('/admin/blogs/add', methods=['GET', 'POST'])
+def admin_add_blog():
+    form = BlogForm()
+    if form.validate_on_submit():
+        blog_data = {
+            'title': form.title.data,
+            'slug': form.slug.data,
+            'content': form.content.data,
+            'excerpt': form.excerpt.data,
+            'author': form.author.data,
+            'category': form.category.data,
+            'tags': [t.strip() for t in form.tags.data.split(',')] if form.tags.data else [],
+            'featured_image': form.featured_image.data,
+            'published': form.published.data,
+        }
+        try:
+            supabase.table('blog_posts').insert(blog_data).execute()
+            flash('Blog added successfully!', 'success')
+            return redirect(url_for('admin_blogs'))
+        except Exception as e:
+            if "10035" in str(e):
+                flash('Blog added successfully! (Socket warning ignored)', 'success')
+                return redirect(url_for('admin_blogs'))
+            flash(f'Error adding blog: {str(e)}', 'error')
+    return render_template('admin/blog_form.html', form=form, post=None)
+
+@app.route('/admin/blogs/<blog_id>/edit', methods=['GET', 'POST'])
+def admin_edit_blog(blog_id):
+    try:
+        resp = supabase.table('blog_posts').select('*').eq('id', blog_id).execute()
+        if not resp.data:
+            flash('Blog post not found', 'error')
+            return redirect(url_for('admin_blogs'))
+        post = resp.data[0]
+        form = BlogForm()
+        if form.validate_on_submit():
+            update_data = {
+                'title': form.title.data,
+                'slug': form.slug.data,
+                'content': form.content.data,
+                'excerpt': form.excerpt.data,
+                'author': form.author.data,
+                'category': form.category.data,
+                'tags': [t.strip() for t in form.tags.data.split(',')] if form.tags.data else [],
+                'featured_image': form.featured_image.data,
+                'published': form.published.data,
+            }
+            try:
+                supabase.table('blog_posts').update(update_data).eq('id', blog_id).execute()
+                flash('Blog post updated successfully!', 'success')
+                return redirect(url_for('admin_blogs'))
+            except Exception as e:
+                if "10035" in str(e):
+                    flash('Blog post updated successfully! (Socket warning ignored)', 'success')
+                    return redirect(url_for('admin_blogs'))
+                flash(f'Error updating blog: {str(e)}', 'error')
+        # Populate form on GET
+        if request.method == 'GET':
+            for field in form:
+                if field.name in post and post[field.name] is not None:
+                    if field.name == 'tags' and isinstance(post[field.name], list):
+                        field.data = ', '.join(post[field.name])
+                    else:
+                        field.data = post[field.name]
+        return render_template('admin/blog_form.html', form=form, post=post)
+    except Exception as e:
+        flash(f'Error loading blog post: {str(e)}', 'error')
+        return redirect(url_for('admin_blogs'))
+
+@app.route('/admin/blogs/<blog_id>/delete', methods=['POST'])
+def admin_delete_blog(blog_id):
+    try:
+        supabase.table('blog_posts').delete().eq('id', blog_id).execute()
+        flash('Blog post deleted successfully!', 'success')
+    except Exception as e:
+        if "10035" in str(e):
+            flash('Blog post deleted successfully! (Socket warning ignored)', 'success')
+        else:
+            flash(f'Error deleting blog post: {str(e)}', 'error')
+    return redirect(url_for('admin_blogs'))
+
+# Admin Contact Routes
+@app.route('/admin/contacts')
+def admin_contacts():
+    try:
+        resp = supabase.table('contacts').select('*').order('created_at', desc=True).execute()
+        contacts = resp.data if resp.data else []
+    except Exception as e:
+        flash(f"Error fetching contacts: {e}", "error")
+        contacts = []
+    return render_template('admin/contacts.html', contacts=contacts)
+
+@app.route('/admin/contacts/<contact_id>/delete', methods=['POST'])
+def admin_delete_contact(contact_id):
+    try:
+        supabase.table('contacts').delete().eq('id', contact_id).execute()
+        flash('Message deleted successfully!', 'success')
+    except Exception as e:
+        if "10035" in str(e):
+            flash('Message deleted successfully! (Socket warning ignored)', 'success')
+        else:
+            flash(f'Error deleting message: {str(e)}', 'error')
+    return redirect(url_for('admin_contacts'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -30,7 +30,7 @@ class BlogScheduler:
         with self.app.app_context():
             try:
                 # Get all active generators that should run now
-                generators = BlogPostGenerator.query.filter_by(is_active=True).all()
+                generators = BlogPostGenerator.objects(is_active=True)
 
                 for generator in generators:
                     if generator.should_generate_now():
@@ -83,13 +83,13 @@ class BlogScheduler:
         """Update next scheduled times for all generators"""
         with self.app.app_context():
             try:
-                generators = BlogPostGenerator.query.filter_by(is_active=True).all()
+                generators = BlogPostGenerator.objects(is_active=True)
 
                 for generator in generators:
                     next_run = self.get_next_run_time(generator)
                     if next_run != generator.next_scheduled:
                         generator.next_scheduled = next_run
-                        db.session.commit()
+                        generator.save()
 
             except Exception as e:
                 current_app.logger.error(f"Failed to update generator schedules: {str(e)}")

@@ -1,0 +1,94 @@
+/* Custom styles for dark mode toggle and other overrides */
+
+/* Fix for dark mode toggle positioning */
+.mxd-header__controls {
+    position: relative;
+    z-index: 1000; /* Ensure it's above other elements */
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mxd-color-switcher {
+    position: relative;
+    z-index: 1001; /* Above the header controls */
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 4.8rem;
+    height: 4.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* Ensure the toggle is visible on all screen sizes */
+@media (max-width: 767px) {
+    .mxd-color-switcher {
+        width: 4rem;
+        height: 4rem;
+    }
+    
+    .mxd-color-switcher i {
+        font-size: 2rem;
+    }
+}
+
+/* Dark mode specific styles */
+[color-scheme="dark"] {
+    --base: #FAF7F6;
+    --base-opp: #161616;
+    --base-tint: #2A2A2A;
+    --base-tint-2: #3A3A3A;
+    --base-tint-3: #4A4A4A;
+    --base-tint-4: #5A5A5A;
+    --base-shade: #E0DDDC;
+    --base-shade-2: #C6C3C2;
+    --base-shade-3: #ACA9A8;
+    --base-shade-4: #928F8E;
+    --base-shade-5: #787574;
+}
+
+/* Ensure the toggle is visible in both light and dark modes */
+.mxd-color-switcher {
+    color: var(--base-opp);
+    background-color: var(--base);
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+[color-scheme="dark"] .mxd-color-switcher {
+    color: var(--base);
+    background-color: var(--base-opp);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth transition for theme change */
+html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ensure the toggle button has proper spacing */
+@media (min-width: 768px) {
+    .mxd-header__controls {
+        padding: 1rem 0;
+    }
+}
+
+/* Fix for navbar z-index to prevent overlap */
+.mxd-header {
+    position: relative;
+    z-index: 1000;
+}
+
+/* Ensure the toggle is clickable on mobile */
+.mxd-color-switcher {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dpad {
+    padding-top: 14rem;
+}

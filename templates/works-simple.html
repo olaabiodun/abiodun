@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block title %}Portfolio - Olanipekun Abiodun{% endblock %}
-{% block description %}Explore my portfolio of web development projects, mobile apps, and digital solutions. See how I bring ideas to life with modern technologies.{% endblock %}
+{% block description %}Explore my portfolio of web development projects, mobile apps, and digital solutions. See how I
+bring ideas to life with modern technologies.{% endblock %}
 
 {% block content %}
 <!-- Section - Inner Page Headline Start -->
@@ -13,14 +14,15 @@
           <div class="col-12 col-xl-2 mxd-grid-item no-margin">
             <div class="mxd-block__name name-inner-headline loading__item">
               <p class="mxd-point-subtitle">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
+                  viewBox="0 0 20 20" fill="currentColor">
                   <path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2
                     c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4
                     c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2
                     c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6
                     c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4
                     c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6
-                    c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"/>
+                    c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z" />
                 </svg>
                 <span>Works</span>
               </p>
@@ -44,10 +46,13 @@
     <div class="mxd-block">
       <div class="mxd-projects-list hover-reveal">
         {% for project in projects %}
-        <a class="mxd-projects-list__item hover-reveal__item" href="{{ url_for('project_details', project_id=project.id) }}">
+        <a class="mxd-projects-list__item hover-reveal__item"
+          href="{{ url_for('project_details', project_id=project.id) }}">
           <div class="mxd-projects-list__border anim-uni-in-up"></div>
           <div class="hover-reveal__content hover-reveal-280x340">
-            <img class="hover-reveal__image" src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}" alt="{{ project.title }}">
+            <img class="hover-reveal__image"
+              src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}"
+              alt="{{ project.title }}">
           </div>
           <div class="mxd-projects-list__inner">
             <div class="container-fluid px-0">
@@ -58,19 +63,24 @@
                     <p>{{ project.title }}</p>
                   </div>
                   <div class="mxd-projects-list__image anim-uni-in-up">
-                    <img src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}" alt="{{ project.title }}">
+                    <img
+                      src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}"
+                      alt="{{ project.title }}">
                   </div>
                 </div>
                 <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">
                   <div class="mxd-projects-list__tagslist">
                     <ul>
-                      {% set tags = project.get_tags_list() %}
-                      {% if tags %}
-                      {% for tag in tags %}
-                      <li class="anim-uni-in-up"><p class="t-small">{{ tag }}</p></li>
+                      {% if project.tags %}
+                      {% for tag in project.tags %}
+                      <li class="anim-uni-in-up">
+                        <p class="t-small">{{ tag }}</p>
+                      </li>
                       {% endfor %}
                       {% else %}
-                      <li class="anim-uni-in-up"><p class="t-small">{{ project.category|title }}</p></li>
+                      <li class="anim-uni-in-up">
+                        <p class="t-small">{{ project.category|title }}</p>
+                      </li>
                       {% endif %}
                     </ul>
                   </div>

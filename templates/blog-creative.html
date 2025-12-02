@@ -61,24 +61,38 @@
         <!-- Featured Post Start -->
         <article class="mxd-post post-featured post-featured-v2 radius-l">
           <a class="post-featured__thumb" href="{{ url_for('blog_article', slug=featured_post.slug) }}">
-            <img src="{{ url_for('static', filename=featured_post.featured_image) }}" alt="{{ featured_post.title }}">
+            <img src="{{ featured_post.featured_image }}" alt="{{ featured_post.title }}">
           </a>
           <div class="post-featured__categories">
-            {% for tag in featured_post.tags.split(',') %}
-            <span class="tag tag-default tag-outline-permanent tag-link-outline-premanent">
-              <a href="#0">{{ tag.strip() }}</a>
-            </span>
+            {% if featured_post.tags is string %}
+              {% set tag_list = featured_post.tags.split(',') %}
+            {% else %}
+              {% set tag_list = featured_post.tags %}
+            {% endif %}
+            {% for tag in tag_list %}
+              {% if tag %}
+              <span class="tag tag-default tag-outline-permanent tag-link-outline-premanent">
+                <a href="#0">{{ tag.strip() if tag is string else tag }}</a>
+              </span>
+              {% endif %}
             {% endfor %}
           </div>
           <div class="post-featured__content">
             <div class="post-featured__meta">
-              {% for tag in featured_post.tags.split(',') %}
-              <span class="meta-tag">
-                <a href="#0">{{ tag.strip() }}</a>
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 20 20">
-                  <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
-                </svg>
-              </span>
+              {% if featured_post.tags is string %}
+                {% set meta_tag_list = featured_post.tags.split(',') %}
+              {% else %}
+                {% set meta_tag_list = featured_post.tags %}
+              {% endif %}
+              {% for tag in meta_tag_list %}
+                {% if tag %}
+                <span class="meta-tag">
+                  <a href="#0">{{ tag.strip() if tag is string else tag }}</a>
+                  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 20 20">
+                    <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
+                  </svg>
+                </span>
+                {% endif %}
               {% endfor %}
               <span class="meta-date">{{ featured_post.created_at.strftime('%B %d, %Y') }}</span>
             </div>
@@ -113,21 +127,35 @@
                   </div>
                 </a>
                 <div class="post-secondary__categories">
-                  {% for tag in post.tags.split(',') %}
-                  <span class="tag tag-default tag-outline-permanent tag-link-outline-premanent">
-                    <a href="#0">{{ tag.strip() }}</a>
-                  </span>
+                  {% if post.tags is string %}
+                    {% set tag_list = post.tags.split(',') %}
+                  {% else %}
+                    {% set tag_list = post.tags %}
+                  {% endif %}
+                  {% for tag in tag_list %}
+                    {% if tag %}
+                    <span class="tag tag-default tag-outline-permanent tag-link-outline-premanent">
+                      <a href="#0">{{ tag.strip() if tag is string else tag }}</a>
+                    </span>
+                    {% endif %}
                   {% endfor %}
                 </div>
                 <div class="post-secondary__descr">
                   <div class="post-secondary__meta">
-                    {% for tag in post.tags.split(',') %}
-                    <span class="meta-tag">
-                      <a href="#0">{{ tag.strip() }}</a>
-                      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 20 20">
-                        <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
-                      </svg>
-                    </span>
+                    {% if post.tags is string %}
+                      {% set meta_tag_list = post.tags.split(',') %}
+                    {% else %}
+                      {% set meta_tag_list = post.tags %}
+                    {% endif %}
+                    {% for tag in meta_tag_list %}
+                      {% if tag %}
+                      <span class="meta-tag">
+                        <a href="#0">{{ tag.strip() if tag is string else tag }}</a>
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 20 20">
+                          <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
+                        </svg>
+                      </span>
+                      {% endif %}
                     {% endfor %}
                     <span class="meta-date">{{ post.created_at.strftime('%B %d, %Y') }}</span>
                   </div>

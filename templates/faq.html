@@ -117,47 +117,168 @@
 <!-- Section - FAQ End -->
 {% endblock %}
 
+{% block extra_styles %}
+<style>
+  /* Add smooth animation for FAQ items */
+  .mxd-faq__item {
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .mxd-faq__item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .mxd-faq__question {
+    cursor: pointer;
+    padding: 1.25rem 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+  
+  .mxd-faq__question:hover {
+    background: #e9ecef;
+  }
+  
+  .mxd-faq__question h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+  
+  .mxd-faq__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 1.5rem;
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .mxd-faq__answer p {
+    margin: 0;
+    padding: 1.5rem 0;
+    color: #495057;
+    line-height: 1.6;
+  }
+  
+  .mxd-faq__item.active .mxd-faq__answer {
+    max-height: 500px; /* Adjust based on your content */
+    padding: 0 1.5rem 1.5rem;
+  }
+  
+  .mxd-faq__item:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+  
+  .mxd-faq__question i {
+    transition: transform 0.3s ease;
+  }
+  
+  .mxd-faq__item.active .mxd-faq__question i {
+    transform: rotate(180deg);
+  }
+</style>
+{% endblock %}
+
 {% block extra_scripts %}
 <script>
-  // Ensure FAQ accordion toggles even if vendor init doesn't bind
-  document.addEventListener('DOMContentLoaded', function () {
-    const items = document.querySelectorAll('.mxd-faq__item');
-    if (!items.length) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('.mxd-faq__item');
+    if (!faqItems.length) return;
 
-    items.forEach((item, idx) => {
+    // Function to close all FAQ items with animation
+    function closeAll() {
+      faqItems.forEach(item => {
+        if (item.classList.contains('active')) {
+          const answer = item.querySelector('.mxd-faq__answer');
+          const icon = item.querySelector('.mxd-faq__question i');
+          
+          // Start collapse animation
+          if (answer) {
+            answer.style.maxHeight = '0';
+            answer.style.paddingBottom = '0';
+            
+            // After animation completes, hide the answer
+            setTimeout(() => {
+              answer.style.display = 'none';
+              item.classList.remove('active');
+            }, 300);
+          }
+          
+          if (icon) {
+            icon.className = 'ph ph-plus';
+          }
+        }
+      });
+    }
+
+    // Function to open a specific FAQ item with animation
+    function openItem(item) {
+      const answer = item.querySelector('.mxd-faq__answer');
+      const icon = item.querySelector('.mxd-faq__question i');
+      
+      // Close all other items first
+      closeAll();
+      
+      // Set initial state for animation
+      answer.style.display = 'block';
+      answer.style.maxHeight = '0';
+      
+      // Trigger reflow to ensure the initial state is applied
+      void answer.offsetHeight;
+      
+      // Start expand animation
+      item.classList.add('active');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      answer.style.paddingBottom = '1.5rem';
+      
+      if (icon) {
+        icon.className = 'ph ph-minus';
+      }
+    }
+
+    // Initialize all items
+    faqItems.forEach((item, index) => {
       const question = item.querySelector('.mxd-faq__question');
       const answer = item.querySelector('.mxd-faq__answer');
-      const icon = question ? question.querySelector('i') : null;
-
-      // Initialize: open first, close others
-      if (idx === 0) {
-        item.classList.add('active');
-        if (answer) answer.style.maxHeight = answer.scrollHeight + 'px';
-        if (icon) { icon.classList.remove('ph-plus'); icon.classList.add('ph-minus'); }
-      } else {
-        if (answer) answer.style.maxHeight = 0;
+      
+      // Set initial state
+      if (answer) {
+        answer.style.display = 'none';
+        answer.style.maxHeight = '0';
+        answer.style.overflow = 'hidden';
+        answer.style.transition = 'max-height 0.3s ease, padding-bottom 0.3s ease';
       }
-
-      if (question) {
-        question.addEventListener('click', function () {
-          const isActive = item.classList.contains('active');
-          // Close all
-          items.forEach(it => {
-            it.classList.remove('active');
-            const a = it.querySelector('.mxd-faq__answer');
-            const ic = it.querySelector('.mxd-faq__question i');
-            if (a) a.style.maxHeight = 0;
-            if (ic) { ic.classList.add('ph-plus'); ic.classList.remove('ph-minus'); }
-          });
-          // Open clicked if it was not active
-          if (!isActive) {
-            item.classList.add('active');
-            if (answer) answer.style.maxHeight = answer.scrollHeight + 'px';
-            if (icon) { icon.classList.remove('ph-plus'); icon.classList.add('ph-minus'); }
-          }
-        });
+      
+      // Add margin between items
+      if (index < faqItems.length - 1) {
+        item.style.marginBottom = '1rem';
       }
+      
+      // Add click event
+      question.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        if (item.classList.contains('active')) {
+          closeAll();
+        } else {
+          openItem(item);
+        }
+      });
     });
+
+    // Open first item by default
+    if (faqItems[0]) {
+      // Use setTimeout to ensure all styles are applied first
+      setTimeout(() => {
+        openItem(faqItems[0]);
+      }, 100);
+    }
   });
 </script>
 {% endblock %}
