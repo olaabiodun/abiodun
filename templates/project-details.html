@@ -289,24 +289,24 @@ block content %}
                     <div class="row g-0">
                       <div class="col-6 mxd-project__navitem left mxd-grid-item no-margin anim-uni-in-up">
                         <a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-left"
-                          href="{{ url_for('project_details', slug=prev_project.slug) if prev_project else '#' }}">
+                          href="{{ url_for('project_details', project_id=prev_project.id) if prev_project else '#' }}">
                           <i class="ph ph-arrow-left"></i>
                           <span class="btn-caption">Prev</span>
                         </a>
                         <a class="mxd-project__link anim-uni-in-up"
-                          href="{{ url_for('project_details', slug=prev_project.slug) if prev_project else '#' }}">
+                          href="{{ url_for('project_details', project_id=prev_project.id) if prev_project else '#' }}">
                           <span>{{ prev_project.title if prev_project else 'No previous
                             project' }}</span>
                         </a>
                       </div>
                       <div class="col-6 mxd-project__navitem right mxd-grid-item no-margin anim-uni-in-up">
                         <a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-right"
-                          href="{{ url_for('project_details', slug=next_project.slug) if next_project else '#' }}">
+                          href="{{ url_for('project_details', project_id=next_project.id) if next_project else '#' }}">
                           <span class="btn-caption">Next</span>
                           <i class="ph ph-arrow-right"></i>
                         </a>
                         <a class="mxd-project__link anim-uni-in-up"
-                          href="{{ url_for('project_details', slug=next_project.slug) if next_project else '#' }}">
+                          href="{{ url_for('project_details', project_id=next_project.id) if next_project else '#' }}">
                           <span>{{ next_project.title if next_project else 'No next
                             project' }}</span>
                         </a>

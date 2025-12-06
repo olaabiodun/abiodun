@@ -48,14 +48,14 @@
       
       /* Custom Loading Animation for Home Page */
       .loader__count .count__text {
-        font-size: 4rem;
+        font-size: 8rem;
         font-weight: bold;
         color: var(--base-opp);
         transition: all 0.1s ease;
       }
       
       .loader__count .count__percent {
-        font-size: 2rem;
+        font-size: 4rem;
         color: var(--base-opp);
         margin-left: 0.2rem;
       }
@@ -393,7 +393,7 @@
             </a>
         </div>
         <!-- header controls -->
-        <div class="mxd-header__controls loading__fade">
+        <div class="mxd-header__controls loading__fade" style="align-items: center;justify-content: center;">
             <button id="color-switcher" class="mxd-color-switcher" type="button" role="switch" aria-label="light/dark mode" aria-checked="true"></button>
             <a class="btn btn-anim btn-default btn-mobile-icon btn-outline slide-right-up" href="{{ url_for('contact') }}">
                 <span class="btn-caption">Say Hello</span>
@@ -536,7 +536,7 @@
                         </div>
                         <!-- subscribe form -->
                         <form class="form notify-form form-light" action="{{ url_for('subscribe') }}" method="POST">
-    <input type="hidden" name="csrf_token"/>
+    <input type="hidden" value="{{ csrf_token() }}" name="csrf_token"/>
     <input type="email" name="email" placeholder="Your Email" required>
     <button class="btn btn-form btn-absolute-right btn-muted slide-right-up anim-no-delay" type="submit">
         <i class="ph ph-arrow-up-right"></i>

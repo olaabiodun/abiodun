@@ -4,10 +4,19 @@ from dotenv import load_dotenv
 import os
 from supabase import create_client, Client
 from forms import ProjectForm, BlogForm, ContactForm
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
+from flask_wtf.csrf import CSRFProtect
+
 
 app = Flask(__name__)
+
+
+csrf = CSRFProtect(app)
+
+app.secret_key ='669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'
+
+
 
 # Configure cache
 cache = Cache(config={
@@ -16,6 +25,14 @@ cache = Cache(config={
     'CACHE_THRESHOLD': 1000  # Maximum number of items the cache will store
 })
 cache.init_app(app)
+
+HSTS_SECONDS = 31536000 
+
+@app.after_request
+def add_hsts_header(response):
+    if request.is_secure: 
+        response.headers.add('Strict-Transport-Security', f'max-age={HSTS_SECONDS}; includeSubDomains; preload')
+    return response
 
 def make_cache_key(*args, **kwargs):
     """Create a cache key from the request path and query parameters."""
@@ -26,7 +43,6 @@ def make_cache_key(*args, **kwargs):
 
 load_dotenv()
 
-app.secret_key = '669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'
 
 supabase: Client = create_client(os.getenv('SUPABASE_URL'), os.getenv('SUPABASE_ANON_KEY'))
 
@@ -552,3 +568,4 @@ def admin_delete_contact(contact_id):
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
