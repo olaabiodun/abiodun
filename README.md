@@ -1,6 +1,6 @@
 # Portfolio Website - Flask Version
 
-Beautiful, modern portfolio website converted from HTML to Flask while preserving all design elements and functionality.
+Very beautiful, modern portfolio website converted from HTML to Flask while preserving all design elements and functionality.
 
 ## 🚀 Features
 
