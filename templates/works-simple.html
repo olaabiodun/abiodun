@@ -51,7 +51,7 @@ bring ideas to life with modern technologies.{% endblock %}
           <div class="mxd-projects-list__border anim-uni-in-up"></div>
           <div class="hover-reveal__content hover-reveal-280x340">
             <img class="hover-reveal__image"
-              src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}"
+              src="{{ resolve_image_url(project.image_url) }}"
               alt="{{ project.title }}">
           </div>
           <div class="mxd-projects-list__inner">
@@ -64,8 +64,9 @@ bring ideas to life with modern technologies.{% endblock %}
                   </div>
                   <div class="mxd-projects-list__image anim-uni-in-up">
                     <img
-                      src="{{ url_for('static', filename=project.image_url or 'img/works/preview/1200x800_prv-01.webp') }}"
-                      alt="{{ project.title }}">
+                      src="{{ resolve_image_url(project.image_url) }}"
+                      alt="{{ project.title }}"
+                      style="width: 100%; height: auto; display: block;">
                   </div>
                 </div>
                 <div class="col-6 col-md-6 col-xl-2 mxd-grid-item no-margin">

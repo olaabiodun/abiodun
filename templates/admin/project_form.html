@@ -1,73 +1,75 @@
 {% extends "admin/layout.html" %}
+{% block page_title %}{{ 'Edit' if project else 'Add' }} Project{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{ 'Edit' if project else 'Add' }} Project</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="{{ url_for('admin_projects') }}" class="btn btn-sm btn-outline-secondary">
+<div class="section-header">
+    <h2>{{ 'Edit' if project else 'Add' }} Project</h2>
+    <div class="header-actions">
+        <a href="{{ url_for('admin_projects') }}" class="btn btn-outline">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>
 </div>
 
-<form method="POST" action="">
+<form method="POST" action="" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
+    <div class="form-layout">
+        <div class="form-main">
+            <div class="card">
                 <div class="card-header">Basic Information</div>
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.title.label(class="form-label") }}
-                        {{ form.title(class="form-control") }}
+                        {{ form.title(class="form-control" + (' is-invalid' if form.title.errors else '')) }}
                         {% for error in form.title.errors %}
-                        <div class="text-danger">{{ error }}</div>
+                        <div class="field-error">{{ error }}</div>
                         {% endfor %}
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.slug.label(class="form-label") }}
-                        {{ form.slug(class="form-control") }}
+                        {{ form.slug(class="form-control" + (' is-invalid' if form.slug.errors else '')) }}
+                        <div class="form-help">Auto-generated from title if left blank</div>
                         {% for error in form.slug.errors %}
-                        <div class="text-danger">{{ error }}</div>
+                        <div class="field-error">{{ error }}</div>
                         {% endfor %}
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.description.label(class="form-label") }}
-                        {{ form.description(class="form-control", rows=5) }}
+                        {{ form.description(class="form-control" + (' is-invalid' if form.description.errors else ''), rows=5) }}
                         {% for error in form.description.errors %}
-                        <div class="text-danger">{{ error }}</div>
+                        <div class="field-error">{{ error }}</div>
                         {% endfor %}
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.excerpt.label(class="form-label") }}
-                        {{ form.excerpt(class="form-control", rows=3) }}
+                        {{ form.excerpt(class="form-control" + (' is-invalid' if form.excerpt.errors else ''), rows=3) }}
                         {% for error in form.excerpt.errors %}
-                        <div class="text-danger">{{ error }}</div>
+                        <div class="field-error">{{ error }}</div>
                         {% endfor %}
                     </div>
                 </div>
             </div>
 
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-header">Case Study Details</div>
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.challenge_summary.label(class="form-label") }}
                         {{ form.challenge_summary(class="form-control", rows=2) }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.challenge_description.label(class="form-label") }}
                         {{ form.challenge_description(class="form-control", rows=4) }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.solution_summary.label(class="form-label") }}
                         {{ form.solution_summary(class="form-control", rows=2) }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.solution_description.label(class="form-label") }}
                         {{ form.solution_description(class="form-control", rows=4) }}
                     </div>
@@ -75,90 +77,130 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card mb-4">
+        <div class="form-sidebar">
+            <div class="card">
                 <div class="card-header">Classification</div>
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.category.label(class="form-label") }}
-                        {{ form.category(class="form-select") }}
+                        {{ form.category(class="form-control") }}
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.industry.label(class="form-label") }}
                         {{ form.industry(class="form-control") }}
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.services.label(class="form-label") }}
                         {{ form.services(class="form-control") }}
-                        <div class="form-text">Comma-separated values</div>
+                        <div class="form-help">Comma-separated values</div>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.tags.label(class="form-label") }}
                         {{ form.tags(class="form-control") }}
-                        <div class="form-text">Comma-separated values</div>
+                        <div class="form-help">Comma-separated values</div>
                     </div>
 
-                    <div class="mb-3 form-check">
-                        {{ form.featured(class="form-check-input") }}
-                        {{ form.featured.label(class="form-check-label") }}
-                    </div>
+                    <label class="form-checkbox">
+                        {{ form.featured(class="checkbox-input") }}
+                        <span class="checkbox-label">{{ form.featured.label.text }}</span>
+                    </label>
                 </div>
             </div>
 
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-header">Client Info</div>
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.client.label(class="form-label") }}
                         {{ form.client(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.client_name.label(class="form-label") }}
                         {{ form.client_name(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.client_role.label(class="form-label") }}
                         {{ form.client_role(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.client_company.label(class="form-label") }}
                         {{ form.client_company(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.client_company_url.label(class="form-label") }}
                         {{ form.client_company_url(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.client_feedback.label(class="form-label") }}
                         {{ form.client_feedback(class="form-control", rows=3) }}
                     </div>
                 </div>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-header">Links & Media</div>
+            <div class="card">
+                <div class="card-header">Links &amp; Media</div>
                 <div class="card-body">
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.image_url.label(class="form-label") }}
                         {{ form.image_url(class="form-control") }}
+                        <div class="form-help">Paste a URL or upload a file below</div>
                     </div>
-                    <div class="mb-3">
+                    {% if project and project.image_url %}
+                    <div style="margin-bottom:1rem;">
+                        <img src="{{ resolve_image_url(project.image_url) }}"
+                             alt="Current image"
+                             style="width:100%; max-height:140px; object-fit:cover; border-radius:6px; border:1px solid var(--border);">
+                        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.25rem;">Current image</div>
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        {{ form.image_upload.label(class="form-label") }}
+                        {{ form.image_upload(class="form-control", accept="image/jpeg,image/png,image/webp,image/gif") }}
+                        <div class="form-help">Upload from your computer (jpg, png, webp, gif)</div>
+                    </div>
+                    <div class="form-group">
                         {{ form.github_url.label(class="form-label") }}
                         {{ form.github_url(class="form-control") }}
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group">
                         {{ form.live_url.label(class="form-label") }}
                         {{ form.live_url(class="form-control") }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form.playstore_url.label(class="form-label") }}
+                        {{ form.playstore_url(class="form-control", placeholder="https://play.google.com/store/apps/details?id=...") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.appstore_url.label(class="form-label") }}
+                        {{ form.appstore_url(class="form-control", placeholder="https://apps.apple.com/app/id...") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.apk_url.label(class="form-label") }}
+                        {{ form.apk_url(class="form-control") }}
+                        <div class="form-help">Paste a URL or upload an APK below</div>
+                    </div>
+                    {% if project and project.apk_url %}
+                    <div style="margin-bottom:1rem; padding:0.5rem 0.75rem; background:#f8fafc; border:1px solid var(--border); border-radius:6px; font-size:0.8rem; color:var(--text-secondary); display:flex; align-items:center; gap:0.5rem;">
+                        <i class="bi bi-filetype-apk"></i>
+                        <span>Current APK uploaded</span>
+                        <a href="{{ project.apk_url }}" target="_blank" style="margin-left:auto; color:var(--primary); text-decoration:none; font-weight:500;">View</a>
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        {{ form.apk_upload.label(class="form-label") }}
+                        {{ form.apk_upload(class="form-control", accept=".apk") }}
+                        <div class="form-help">Upload APK file (up to 200MB)</div>
                     </div>
                 </div>
             </div>
 
-            <div class="d-grid gap-2">
-                {{ form.submit(class="btn btn-primary btn-lg") }}
-            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="bi bi-check-lg"></i> {{ 'Update' if project else 'Create' }} Project
+            </button>
         </div>
     </div>
 </form>

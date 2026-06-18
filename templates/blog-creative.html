@@ -61,7 +61,7 @@
         <!-- Featured Post Start -->
         <article class="mxd-post post-featured post-featured-v2 radius-l">
           <a class="post-featured__thumb" href="{{ url_for('blog_article', slug=featured_post.slug) }}">
-            <img src="{{ featured_post.featured_image }}" alt="{{ featured_post.title }}">
+            <img src="{{ resolve_image_url(featured_post.featured_image) }}" alt="{{ featured_post.title }}">
           </a>
           <div class="post-featured__categories">
             {% if featured_post.tags is string %}
@@ -119,7 +119,7 @@
             <div class="col-12 col-xl-6 mxd-grid-item">
               <article class="mxd-post post-secondary">
                 <a class="post-secondary__thumb radius-l" href="{{ url_for('blog_article', slug=post.slug) }}">
-                  <img src="{{ url_for('static', filename=post.featured_image) }}" alt="{{ post.title }}">
+                  <img src="{{ resolve_image_url(post.featured_image) }}" alt="{{ post.title }}">
                   <div class="mxd-preview-hover">
                     <i class="mxd-preview-hover__icon">
                       <img src="{{ url_for('static', filename='img/icons/icon-eye.svg') }}" alt="Eye Icon">

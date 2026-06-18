@@ -1,72 +1,36 @@
 {% extends "admin/layout.html" %}
+{% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <h1 class="h3 mb-4">Dashboard</h1>
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-glow blue"></div>
+        <div class="stat-icon blue"><i class="bi bi-folder-fill"></i></div>
+        <div class="stat-label">Projects</div>
+        <div class="stat-value">{{ project_count }}</div>
+        <a href="{{ url_for('admin_projects') }}" class="stat-link">
+            View Details <i class="bi bi-chevron-right"></i>
+        </a>
+    </div>
 
-    <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Projects</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ project_count }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-folder fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-primary stretched-link" href="{{ url_for('admin_projects') }}">View Details</a>
-                    <div class="small text-primary"><i class="bi bi-chevron-right"></i></div>
-                </div>
-            </div>
-        </div>
+    <div class="stat-card">
+        <div class="stat-glow green"></div>
+        <div class="stat-icon green"><i class="bi bi-journal-text"></i></div>
+        <div class="stat-label">Blog Posts</div>
+        <div class="stat-value">{{ blog_count }}</div>
+        <a href="{{ url_for('admin_blogs') }}" class="stat-link">
+            View Details <i class="bi bi-chevron-right"></i>
+        </a>
+    </div>
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Blog Posts</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ blog_count }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-journal-text fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-success stretched-link" href="{{ url_for('admin_blogs') }}">View Details</a>
-                    <div class="small text-success"><i class="bi bi-chevron-right"></i></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Messages</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ contact_count }}</div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="bi bi-envelope fa-2x text-gray-300"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-info stretched-link" href="{{ url_for('admin_contacts') }}">View Details</a>
-                    <div class="small text-info"><i class="bi bi-chevron-right"></i></div>
-                </div>
-            </div>
-        </div>
+    <div class="stat-card">
+        <div class="stat-glow yellow"></div>
+        <div class="stat-icon yellow"><i class="bi bi-envelope-fill"></i></div>
+        <div class="stat-label">Messages</div>
+        <div class="stat-value">{{ contact_count }}</div>
+        <a href="{{ url_for('admin_contacts') }}" class="stat-link">
+            View Details <i class="bi bi-chevron-right"></i>
+        </a>
     </div>
 </div>
 {% endblock %}

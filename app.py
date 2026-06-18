@@ -6,6 +6,8 @@ from supabase import create_client, Client
 from forms import ProjectForm, BlogForm, ContactForm
 from datetime import datetime
 import json
+import uuid
+from werkzeug.utils import secure_filename
 from flask_wtf.csrf import CSRFProtect
 
 
@@ -14,8 +16,18 @@ app = Flask(__name__)
 
 csrf = CSRFProtect(app)
 
-app.secret_key ='669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'
 
+@app.template_global()
+def resolve_image_url(image_url):
+    """Resolve image URL: absolute URLs pass through, relative paths get /static/ prefix."""
+    if not image_url:
+        return url_for('static', filename='img/works/preview/1200x800_prv-01.webp')
+    if image_url.startswith(('http://', 'https://', '//')):
+        return image_url
+    return url_for('static', filename=image_url)
+
+app.secret_key ='669c000dcb83e30c44c7d5d75ddf627211a689315685976fe1f5c1e00f720c26'
+app.config['MAX_CONTENT_LENGTH'] = 250 * 1024 * 1024  # 250MB max upload
 
 
 # Configure cache
@@ -45,6 +57,37 @@ load_dotenv()
 
 
 supabase: Client = create_client(os.getenv('SUPABASE_URL'), os.getenv('SUPABASE_ANON_KEY'))
+STORAGE_BUCKET = os.getenv('SUPABASE_STORAGE_BUCKET', 'project-images')
+
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
+
+def upload_to_supabase(file, folder='projects'):
+    ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'webp'
+    filename = f"{uuid.uuid4().hex}.{ext}"
+    path = f"{folder}/{filename}"
+    try:
+        supabase.storage.from_(STORAGE_BUCKET).upload(
+            path, file.read(), {'content-type': f'image/{ext}' if ext != 'jpg' else 'image/jpeg'}
+        )
+        public_url = supabase.storage.from_(STORAGE_BUCKET).get_public_url(path)
+        return public_url
+    except Exception as e:
+        current_app.logger.error(f"Supabase upload error: {e}")
+        return None
+
+def upload_apk_to_supabase(file, folder='apks'):
+    ext = file.filename.rsplit('.', 1)[1].lower() if '.' in file.filename else 'apk'
+    filename = f"{uuid.uuid4().hex}.{ext}"
+    path = f"{folder}/{filename}"
+    try:
+        supabase.storage.from_(STORAGE_BUCKET).upload(
+            path, file.read(), {'content-type': 'application/vnd.android.package-archive'}
+        )
+        public_url = supabase.storage.from_(STORAGE_BUCKET).get_public_url(path)
+        return public_url
+    except Exception as e:
+        current_app.logger.error(f"Supabase APK upload error: {e}")
+        return None
 
 # Error handlers
 @app.errorhandler(404)
@@ -55,6 +98,11 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
+@app.errorhandler(413)
+def request_entity_too_large(e):
+    flash('File too large. Maximum size is 250MB.', 'error')
+    return redirect(request.url or url_for('admin_dashboard'))
+
 # Routes
 @app.route('/')
 @cache.cached(timeout=60, key_prefix='index_page')  # Cache for 1 minute
@@ -63,7 +111,7 @@ def index():
         # Try to get projects from cache first
         projects = cache.get('projects_list')
         if projects is None:
-            response = supabase.table('projects').select('*').execute()
+            response = supabase.table('projects').select('*').order('created_at', desc=True).execute()
             projects = response.data if response.data else []
             cache.set('projects_list', projects, timeout=60)  # Cache for 1 minute
             
@@ -348,6 +396,20 @@ def admin_projects():
 def admin_add_project():
     form = ProjectForm()
     if form.validate_on_submit():
+        # Handle file upload
+        image_url = form.image_url.data
+        if form.image_upload.data:
+            uploaded = upload_to_supabase(form.image_upload.data)
+            if uploaded:
+                image_url = uploaded
+
+        # Handle APK upload
+        apk_url = form.apk_url.data
+        if form.apk_upload.data:
+            uploaded = upload_apk_to_supabase(form.apk_upload.data)
+            if uploaded:
+                apk_url = uploaded
+
         project_data = {
             'title': form.title.data,
             'slug': form.slug.data,
@@ -366,9 +428,12 @@ def admin_add_project():
             'client_role': form.client_role.data,
             'client_company': form.client_company.data,
             'client_company_url': form.client_company_url.data,
-            'image_url': form.image_url.data,
+            'image_url': image_url,
             'github_url': form.github_url.data,
             'live_url': form.live_url.data,
+            'playstore_url': form.playstore_url.data,
+            'appstore_url': form.appstore_url.data,
+            'apk_url': apk_url,
             'category': form.category.data,
             'featured': form.featured.data,
         }
@@ -393,6 +458,20 @@ def admin_edit_project(project_id):
         project = resp.data[0]
         form = ProjectForm()
         if form.validate_on_submit():
+            # Handle file upload
+            image_url = form.image_url.data
+            if form.image_upload.data:
+                uploaded = upload_to_supabase(form.image_upload.data)
+                if uploaded:
+                    image_url = uploaded
+
+            # Handle APK upload
+            apk_url = form.apk_url.data
+            if form.apk_upload.data:
+                uploaded = upload_apk_to_supabase(form.apk_upload.data)
+                if uploaded:
+                    apk_url = uploaded
+
             update_data = {
                 'title': form.title.data,
                 'slug': form.slug.data,
@@ -411,9 +490,12 @@ def admin_edit_project(project_id):
                 'client_role': form.client_role.data,
                 'client_company': form.client_company.data,
                 'client_company_url': form.client_company_url.data,
-                'image_url': form.image_url.data,
+                'image_url': image_url,
                 'github_url': form.github_url.data,
                 'live_url': form.live_url.data,
+                'playstore_url': form.playstore_url.data,
+                'appstore_url': form.appstore_url.data,
+                'apk_url': apk_url,
                 'category': form.category.data,
                 'featured': form.featured.data,
             }
@@ -565,6 +647,49 @@ def admin_delete_contact(contact_id):
         else:
             flash(f'Error deleting message: {str(e)}', 'error')
     return redirect(url_for('admin_contacts'))
+
+# CV upload/download
+CV_PATH = 'cv/current.pdf'
+
+def get_cv_url():
+    try:
+        files = supabase.storage.from_(STORAGE_BUCKET).list('cv')
+        if any(f['name'] == 'current.pdf' for f in files):
+            return supabase.storage.from_(STORAGE_BUCKET).get_public_url(CV_PATH)
+    except:
+        pass
+    return None
+
+@app.route('/download-cv')
+def download_cv():
+    url = get_cv_url()
+    if url:
+        return redirect(url)
+    flash('CV not available yet.', 'warning')
+    return redirect(url_for('index'))
+
+@app.route('/admin/cv', methods=['GET', 'POST'])
+def admin_cv():
+    if request.method == 'POST':
+        file = request.files.get('cv_file')
+        if file and file.filename.endswith('.pdf'):
+            try:
+                supabase.storage.from_(STORAGE_BUCKET).remove([CV_PATH])
+            except:
+                pass
+            try:
+                supabase.storage.from_(STORAGE_BUCKET).upload(
+                    CV_PATH, file.read(),
+                    {'content-type': 'application/pdf'}
+                )
+                flash('CV uploaded successfully!', 'success')
+            except Exception as e:
+                flash(f'Upload error: {str(e)}', 'error')
+        else:
+            flash('Please upload a PDF file.', 'error')
+        return redirect(url_for('admin_cv'))
+    current_url = get_cv_url()
+    return render_template('admin/cv.html', cv_url=current_url)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

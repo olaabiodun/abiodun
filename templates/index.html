@@ -30,6 +30,12 @@
   <span class="tag tag-default tag-outline">Docker</span>
   <span class="tag tag-default tag-outline">Responsive Design</span>
   <span class="tag tag-default tag-outline">User Research</span>
+  <span class="tag tag-default tag-outline">Expo</span>
+  <span class="tag tag-default tag-outline">React Native</span>
+  <span class="tag tag-default tag-outline">Firebase</span>
+  <span class="tag tag-default tag-outline">Supabase</span>
+  <span class="tag tag-default tag-outline">Prisma</span>
+  <span class="tag tag-default tag-outline">MongoDB</span>
 </div>
       </div>
       <div class="mxd-hero-09__objects">
@@ -135,9 +141,9 @@
                     <div
                       class="mxd-project-item__preview preview-image-{{ loop.index }} parallax-img-small"
                     >
-                      <div class="mxd-project-cards__inner align-center bg-light radius-m" style="width: 100%; padding: 0; overflow: hidden;">
+                      <div class="mxd-project-cards__inner align-center bg-light radius-m" style="width: 100%; padding: 0;">
                         <img
-                          src="{{ project.image_url }}"
+                          src="{{ resolve_image_url(project.image_url) }}"
                           alt="{{ project.title }} Main Image"
                           style="width: 100%; height: 100%; display: block; object-fit: cover;"
                           loading="lazy"
@@ -335,31 +341,31 @@
                   </a>
                 </div>
                 <div class="mxd-services-stack__title width-60">
-                  <h3 class="opposite">Data Science<br />& Analytics</h3>
+                  <h3 class="opposite">App Developer<br />iOS & Android</h3>
                 </div>
                 <div class="mxd-services-stack__info width-60">
                   <div class="mxd-services-cards__tags">
                     <span class="tag tag-default tag-outline-opposite"
-                      >Machine Learning</span
+                      >React Native</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Data Visualization</span
+                      >Expo</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Predictive Analytics</span
+                      >TypeScript</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Python</span
+                      >Firebase</span
                     >
                     <span class="tag tag-default tag-outline-opposite"
-                      >Big Data</span
+                      >App Store</span
                     >
                   </div>
                   <p class="t-opposite">
-                    I transform raw data into actionable insights using advanced
-                    analytics and machine learning. From data visualization to
-                    predictive modeling, I help businesses make data-driven
-                    decisions.
+                    I build iOS and Android apps using React Native, Expo, and
+                    modern tools. From concept to deployment, I create
+                    cross-platform mobile experiences that perform beautifully
+                    on both stores.
                   </p>
                 </div>
                 <div class="services-stack__image">
@@ -501,12 +507,12 @@
               <div class="mxd-block__manifest centered anim-uni-in-up">
                 <p class="mxd-manifest mxd-manifest-l reveal-type">
                   I'm a passionate technologist who loves turning complex
-                  problems into elegant solutions. With expertise in AI/ML, Data
-                  Science, and DevOps, I bridge the gap between data and
-                  deployment. Whether it's building intelligent systems,
-                  extracting insights from data, or architecting scalable cloud
-                  infrastructure, I thrive on creating technology that makes an
-                  impact.
+                  problems into elegant solutions. With expertise in
+                  cross-platform mobile development, I build iOS and Android
+                  apps using React Native, Expo, and modern tools. Whether
+                  it's crafting smooth UIs, integrating native features, or
+                  deploying to the App Store and Google Play, I thrive on
+                  creating technology that makes an impact.
                 </p>
                 <div class="mxd-manifest__controls anim-uni-in-up">
                   <div class="mxd-btngroup centered">
@@ -519,7 +525,7 @@
                     </a>
                     <a
                       class="btn btn-anim btn-default btn-outline slide-down"
-                      href="#0"
+                      href="{{ url_for('download_cv') }}"
                     >
                       <span class="btn-caption">Download CV</span>
                       <i class="ph-bold ph-arrow-down"></i>
@@ -649,7 +655,7 @@
                 >
                   <img 
                     class="parallax-img-small"
-                    src="{{ blog.featured_image }}" 
+                    src="{{ resolve_image_url(blog.featured_image) }}" 
                     alt="Blog Preview Image"
                   />
                 </div>

@@ -92,3 +92,158 @@ html {
 .dpad {
     padding-top: 14rem;
 }
+
+/* Fix project list images - fill container without distortion */
+.hover-reveal__image {
+    -webkit-transform: scale(1, 1) !important;
+    -moz-transform: scale(1, 1) !important;
+    -ms-transform: scale(1, 1) !important;
+    transform: scale(1, 1) !important;
+}
+
+.mxd-projects-list__image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--_radius-m, 12px);
+}
+
+/* Project link buttons (GitHub, Live) */
+.project-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--base-shade-3);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--base-opp);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.project-link-btn:hover {
+    background: var(--base-tint);
+    border-color: var(--base-opp);
+    text-decoration: none;
+}
+
+.project-link-btn i {
+    font-size: 1rem;
+}
+
+/* Store & Download Buttons */
+.store-download-section {
+    padding: 2rem 0 1rem;
+}
+
+.store-buttons-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.store-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1.5px solid transparent;
+    min-width: 180px;
+}
+
+.store-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    text-decoration: none;
+}
+
+.store-btn-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.store-btn-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.store-btn-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+}
+
+.store-btn-name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Play Store */
+.store-btn-play {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #333;
+}
+
+.store-btn-play:hover {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+/* App Store */
+.store-btn-apple {
+    background: #000;
+    color: #fff;
+    border-color: #333;
+}
+
+.store-btn-apple:hover {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+/* APK Download */
+.store-btn-apk {
+    background: #f8fafc;
+    color: #1e293b;
+    border-color: #e2e8f0;
+}
+
+.store-btn-apk:hover {
+    background: #fff;
+    color: #1e293b;
+    border-color: #cbd5e1;
+}
+
+/* Dark mode overrides */
+[color-scheme="dark"] .store-btn-apk {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+
+[color-scheme="dark"] .store-btn-apk:hover {
+    background: #334155;
+    border-color: #475569;
+}
+
+@media (max-width: 600px) {
+    .store-buttons-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .store-btn {
+        justify-content: center;
+    }
+}

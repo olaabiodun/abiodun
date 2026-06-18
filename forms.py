@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, TextAreaField, SelectField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
@@ -48,8 +49,13 @@ class ProjectForm(FlaskForm):
     client_company = StringField('Client Company', validators=[Optional(), Length(max=100)])
     client_company_url = StringField('Client Company URL', validators=[Optional(), Length(max=200)])
     image_url = StringField('Image URL', validators=[Optional(), Length(max=500)])
+    image_upload = FileField('Upload Image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'webp', 'gif'], 'Images only (jpg, png, webp, gif)!')])
     github_url = StringField('GitHub URL', validators=[Optional(), Length(max=500)])
     live_url = StringField('Live URL', validators=[Optional(), Length(max=500)])
+    playstore_url = StringField('Play Store URL', validators=[Optional(), Length(max=500)])
+    appstore_url = StringField('App Store URL', validators=[Optional(), Length(max=500)])
+    apk_url = StringField('APK URL', validators=[Optional(), Length(max=500)])
+    apk_upload = FileField('Upload APK', validators=[FileAllowed(['apk'], 'APK files only!')])
     category = SelectField('Category', choices=[
         ('web', 'Web Development'),
         ('mobile', 'Mobile App'),

@@ -58,38 +58,46 @@ block content %}
                         <div class="mxd-data-list__item">
                           <p class="mxd-data-list__name">Services</p>
                           <p class="mxd-data-list__content">
-                            {{ project.services }}
+                            {% if project.services %}
+                              {% if project.services is string %}
+                                {{ project.services }}
+                              {% else %}
+                                {{ project.services | join(', ') }}
+                              {% endif %}
+                            {% endif %}
                           </p>
                         </div>
                       </div>
                       <div class="col-12 col-md-6 col-xl-5 mxd-data-list__column loading__item">
+                        {% if project.industry %}
                         <div class="mxd-data-list__item">
                           <p class="mxd-data-list__name">Industries</p>
-                          <p class="mxd-data-list__content">
+                          <p class="mxd-data-list__content">{{ project.industry }}</p>
                         </div>
-                      </div>
-                    </div>
-                    <!-- Inner Headline Paragraph & Data End -->
-
-                    <!-- Inner Headline Tags Start -->
-                    <div class="col-12 col-xl-4 mxd-grid-item no-margin">
-                      <div class="inner-headline__tags loading__fade">
-                        {% if project.tags %}
-                          {% if project.tags is string %}
-                            {% set tag_list = project.tags.split(',') %}
-                          {% else %}
-                            {% set tag_list = project.tags %}
-                          {% endif %}
-                          {% for tag in tag_list %}
-                            {% if tag %}
-                              <span class="tag tag-default tag-outline-medium">{{ tag.strip() if tag is string else tag }}</span>
-                            {% endif %}
-                          {% endfor %}
+                        {% endif %}
+                        {% if project.github_url %}
+                        <div class="mxd-data-list__item">
+                          <p class="mxd-data-list__name">GitHub</p>
+                          <p class="mxd-data-list__content">
+                            <a href="{{ project.github_url }}" target="_blank" rel="noopener" class="project-link-btn">
+                              <i class="ph ph-github-logo"></i> View Source
+                            </a>
+                          </p>
+                        </div>
+                        {% endif %}
+                        {% if project.live_url %}
+                        <div class="mxd-data-list__item">
+                          <p class="mxd-data-list__name">Live</p>
+                          <p class="mxd-data-list__content">
+                            <a href="{{ project.live_url }}" target="_blank" rel="noopener" class="project-link-btn">
+                              <i class="ph ph-globe"></i> Visit Site
+                            </a>
+                          </p>
+                        </div>
                         {% endif %}
                       </div>
                     </div>
-                  </div>
-                  <!-- Inner Headline Tags End -->
+
                 </div>
               </div>
               <!-- Block - Inner Page Headline End -->
@@ -97,12 +105,57 @@ block content %}
           </div>
           <!-- Section - Inner Page Headline End -->
 
+          <!-- Store & Download Buttons Start -->
+          {% if project.playstore_url or project.appstore_url or project.apk_url %}
+          <div class="mxd-section store-download-section">
+            <div class="mxd-container">
+              <div class="store-buttons-wrapper">
+                {% if project.playstore_url %}
+                <a href="{{ project.playstore_url }}" target="_blank" rel="noopener" class="store-btn store-btn-play">
+                  <svg class="store-btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.807 1.626a1 1 0 010 1.732l-2.807 1.626L15.206 12l2.492-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                  </svg>
+                  <span class="store-btn-text">
+                    <span class="store-btn-label">GET IT ON</span>
+                    <span class="store-btn-name">Google Play</span>
+                  </span>
+                </a>
+                {% endif %}
+                {% if project.appstore_url %}
+                <a href="{{ project.appstore_url }}" target="_blank" rel="noopener" class="store-btn store-btn-apple">
+                  <svg class="store-btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                  </svg>
+                  <span class="store-btn-text">
+                    <span class="store-btn-label">Download on the</span>
+                    <span class="store-btn-name">App Store</span>
+                  </span>
+                </a>
+                {% endif %}
+                {% if project.apk_url %}
+                <a href="{{ project.apk_url }}" target="_blank" rel="noopener" class="store-btn store-btn-apk">
+                  <svg class="store-btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM6 20V4h7v5h5v11H6z"/>
+                    <path d="M8 12l2 2-2 2m4-4h4"/>
+                  </svg>
+                  <span class="store-btn-text">
+                    <span class="store-btn-label">Download</span>
+                    <span class="store-btn-name">APK File</span>
+                  </span>
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <!-- Store & Download Buttons End -->
+
           <!-- Section - Parallax Divider Start -->
-          <div class="mxd-section">
+          <div class="mxd-section" style="padding-top: 6rem;">
             <div class="mxd-container">
               <div class="mxd-divider loading__fade">
                 <div class="mxd-divider__image prj-details-img-01 parallax-img" {% if project.image_url %}
-                  style="background-image: url('{{ project.image_url }}');" {% endif %}></div>
+                  style="background-image: url('{{ resolve_image_url(project.image_url) }}');" {% endif %}></div>
               </div>
             </div>
           </div>
@@ -170,8 +223,8 @@ block content %}
                       {% if project.image_url %}
                       <div class="col-12 col-xl-12 mxd-project-cards__item mxd-grid-item anim-uni-scale-in-up">
                         <div class="mxd-project-cards__inner align-center bg-light radius-m">
-                          <img src="{{ project.image_url }}" alt="{{ project.title }} Main Image"
-                            style="max-width: 100%; height: auto" loading="lazy" decoding="async" />
+                          <img src="{{ resolve_image_url(project.image_url) }}" alt="{{ project.title }} Main Image"
+                            style="width: 100%; height: auto; display: block;" loading="lazy" decoding="async" />
                         </div>
                       </div>
                       {% endif %}
@@ -244,7 +297,7 @@ block content %}
               <div class="mxd-project__block mxd-grid-item no-margin">
                 <div class="mxd-divider">
                   <div class="mxd-divider__image prj-details-img-02 parallax-img" {% if project.image_url %}
-                    style="background-image: url('{{ project.image_url }}');" {% endif %}></div>
+                    style="background-image: url('{{ resolve_image_url(project.image_url) }}');" {% endif %}></div>
                 </div>
               </div>
               <!-- Project Block - Parallax Fullwidth Image End -->
