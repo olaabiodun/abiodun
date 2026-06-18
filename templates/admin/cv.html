@@ -6,7 +6,20 @@
     <h2>CV / Resume Manager</h2>
 </div>
 
-<div class="card" style="max-width:560px;">
+<div style="display:flex; flex-direction:column; gap:1.25rem; max-width:560px;">
+<div class="card">
+    <div class="card-header">Generate CV</div>
+    <div class="card-body">
+        <p style="margin:0 0 0.75rem; font-size:0.9rem; color:#6b7280;">
+            Open the CV page in your browser, then press <strong>Ctrl+P</strong> and choose <strong>Save as PDF</strong>.
+        </p>
+        <a href="{{ url_for('cv_page') }}" target="_blank" class="btn btn-secondary">
+            <i class="bi bi-file-earmark-text"></i> Open CV Page
+        </a>
+    </div>
+</div>
+
+<div class="card">
     <div class="card-header">Upload CV</div>
     <div class="card-body">
         {% if cv_url %}
@@ -22,7 +35,7 @@
             <i class="bi bi-exclamation-triangle-fill" style="color:#d97706; font-size:1.25rem;"></i>
             <div>
                 <div style="font-weight:600; font-size:0.9rem; color:#92400e;">No CV uploaded yet</div>
-                <div style="font-size:0.8rem; color:#92400e;">Upload a PDF below</div>
+                <div style="font-size:0.8rem; color:#92400e;">Generate then upload a PDF below</div>
             </div>
         </div>
         {% endif %}
@@ -39,5 +52,6 @@
             </button>
         </form>
     </div>
+</div>
 </div>
 {% endblock %}

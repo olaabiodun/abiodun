@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olanipekun_Abiodun_Resume</title>
+<style>
+@page { margin: 0.5in; size: A4; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: Arial, 'Helvetica Neue', sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  color: #000;
+  background: #fff;
+  padding: 0.5in;
+  max-width: 210mm;
+  margin: 0 auto;
+}
+
+.contact {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.contact h1 {
+  font-size: 20pt;
+  font-weight: 700;
+  color: #000;
+  letter-spacing: -0.3px;
+}
+.contact .title {
+  font-size: 11pt;
+  color: #2563eb;
+  font-weight: 600;
+  margin-top: 1px;
+}
+.contact .info {
+  font-size: 9pt;
+  color: #333;
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.section { margin-bottom: 14px; }
+.section h2 {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #999;
+  padding-bottom: 3px;
+  margin-bottom: 6px;
+}
+
+.summary p { font-size: 10pt; color: #222; }
+
+.skills-text {
+  font-size: 9.5pt;
+  color: #222;
+  line-height: 1.6;
+}
+
+.exp-item { margin-bottom: 10px; }
+.exp-item:last-child { margin-bottom: 0; }
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.exp-role { font-weight: 700; font-size: 10.5pt; color: #000; }
+.exp-company { font-weight: 600; font-size: 10pt; color: #2563eb; }
+.exp-date { font-size: 9pt; color: #555; white-space: nowrap; }
+.exp-item ul {
+  list-style: none;
+  margin-top: 2px;
+}
+.exp-item ul li {
+  font-size: 9.5pt;
+  color: #222;
+  padding-left: 12px;
+  position: relative;
+  margin-bottom: 1px;
+}
+.exp-item ul li::before {
+  content: "•";
+  position: absolute;
+  left: 2px;
+  color: #2563eb;
+}
+
+.proj-item { margin-bottom: 6px; }
+.proj-name { font-weight: 700; font-size: 9.5pt; color: #000; }
+.proj-item p { font-size: 9pt; color: #333; padding-left: 12px; margin-top: 1px; }
+
+.edu-text { font-size: 9.5pt; color: #333; }
+
+@media print {
+  body { padding: 0; }
+  .section h2 { page-break-after: avoid; }
+  .exp-item, .proj-item { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div class="contact">
+  <h1>Olanipekun Abiodun</h1>
+  <div class="title">App &amp; Full Stack Developer</div>
+  <div class="info">
+    abiodun2035@gmail.com | +234 810 149 1460<br>
+    GitHub: github.com/olaabiodun | Portfolio: abiodun.onrender.com
+  </div>
+</div>
+
+<div class="section">
+  <h2>Professional Summary</h2>
+  <div class="summary">
+    <p>App &amp; Full Stack Developer with 5+ years of experience building cross-platform mobile applications and full-stack web solutions. Proficient in React Native, Expo, React, Next.js, JavaScript, TypeScript, Python, and cloud deployment. Built and launched multiple apps on the Play Store with thousands of downloads. Strong background in UI/UX implementation, RESTful API integration, database design, and end-to-end product delivery from concept to production.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Skills</h2>
+  <div class="skills-text">
+    <strong>Mobile Development:</strong> React Native, Expo, Cross-Platform Development, App Store &amp; Play Store Deployment, Push Notifications, In-App Payments, Real-Time Features<br>
+    <strong>Frontend:</strong> React, Next.js, JavaScript, TypeScript, Tailwind CSS, Responsive Web Design, HTML/CSS<br>
+    <strong>Backend &amp; Database:</strong> Python, FastAPI, Node.js, RESTful APIs, PostgreSQL, MongoDB, Prisma, Firebase, WebSockets<br>
+    <strong>DevOps &amp; Tools:</strong> Docker, Git, CI/CD, AWS, Supabase, Cloud Deployment<br>
+    <strong>Full Stack:</strong> SaaS Development, Real-Time Applications, Role-Based Access Control, API Design, Database Architecture
+    <strong>Design &amp; UX:</strong> Figma, UI/UX Design, User Research, Prototyping, Design-to-Code<br>
+    <strong>Other:</strong> Agile Development, Team Collaboration, Problem Solving, Project Management
+  </div>
+</div>
+
+<div class="section">
+  <h2>Work Experience</h2>
+
+  <div class="exp-item">
+    <div class="exp-header">
+      <div><span class="exp-role">App Developer</span> &middot; <span class="exp-company">Rivy Health</span></div>
+      <div class="exp-date">Jan 2024 — May 2026</div>
+    </div>
+    <ul>
+      <li>Developed cross-platform mobile applications using React Native and Expo for patient-facing healthcare features.</li>
+      <li>Built and deployed RESTful APIs with Python (FastAPI) and managed PostgreSQL databases.</li>
+      <li>Implemented real-time data synchronization, push notifications, and secure authentication.</li>
+      <li>Managed cloud infrastructure on AWS using Docker and CI/CD pipelines for reliable deployments.</li>
+    </ul>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-header">
+      <div><span class="exp-role">App Developer</span> &middot; <span class="exp-company">Grain Technologies</span></div>
+      <div class="exp-date">Jun 2022 — Dec 2023</div>
+    </div>
+    <ul>
+      <li>Built a B2B SaaS mobile application connecting smallholder farms to regional buyers using React Native and Expo.</li>
+      <li>Developed cross-platform mobile app with real-time inventory tracking, order management, and in-app messaging.</li>
+      <li>Designed PostgreSQL database schema for inventory, orders, users, and payment transactions.</li>
+      <li>Optimized frontend performance, achieving 45% faster page loads through server-side rendering and image optimization.</li>
+    </ul>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-header">
+      <div><span class="exp-role">Data Scientist</span> &middot; <span class="exp-company">Layer AI</span></div>
+      <div class="exp-date">Sep 2021 — May 2022</div>
+    </div>
+    <ul>
+      <li>Built computer vision models for retail inventory tracking using PyTorch and TensorFlow.</li>
+      <li>Deployed ML models to edge devices and created automated reporting dashboards.</li>
+      <li>Developed data processing pipelines that saved clients 15+ hours of manual work per week.</li>
+    </ul>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-header">
+      <div><span class="exp-role">Frontend Developer</span> &middot; <span class="exp-company">Stitch Digital</span></div>
+      <div class="exp-date">Mar 2020 — Aug 2021</div>
+    </div>
+    <ul>
+      <li>Delivered responsive web and mobile app interfaces for fintech and e-commerce startup clients.</li>
+      <li>Built cross-platform mobile apps with Expo React Native, reaching 10k+ Play Store downloads for a loyalty app.</li>
+      <li>Translated Figma designs into pixel-perfect React components with clean, maintainable code.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Projects</h2>
+
+  <div class="proj-item">
+    <div class="proj-name">RYDA — Ride-Hailing App (Passenger &amp; Driver)</div>
+    <p>Cross-platform ride-hailing mobile application built with React Native and Expo. Features include real-time GPS tracking, in-app payments, push notifications, and driver management dashboard.</p>
+  </div>
+
+  <div class="proj-item">
+    <div class="proj-name">TaskFlow — Full-Stack Project Management SaaS</div>
+    <p>Full-stack project management platform built with Next.js, TypeScript, PostgreSQL, and Prisma. Features include real-time collaboration via WebSockets, role-based access control, Kanban boards, Gantt charts, team management, and automated reporting. Deployed on AWS with CI/CD pipeline.</p>
+  </div>
+
+  <div class="proj-item">
+    <div class="proj-name">BizNova — Business Management Suite</div>
+    <p>Full-featured business management platform with inventory tracking, invoicing, analytics dashboard, and user role management.</p>
+  </div>
+
+  <div class="proj-item">
+    <div class="proj-name">Ije Rides — E-Hailing Mobile Application</div>
+    <p>E-hailing mobile app with ride booking, fare estimation, driver-partner onboarding, and trip history features.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Education</h2>
+  <div class="edu-text">Self-taught software engineer with hands-on experience in mobile development, full-stack engineering, and cloud infrastructure.</div>
+</div>
+
+</body>
+</html>

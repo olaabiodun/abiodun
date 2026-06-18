@@ -270,22 +270,9 @@
                                 <ul id="main-menu" class="main-menu__accordion">
 
                                     <li class="main-menu__item">
-                                        <div class="main-menu__toggle">
-                                            <span class="main-menu__link btn btn-anim">
-                                                <span class="btn-caption">Works</span>
-                                            </span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" version="1.1" viewBox="0 0 20 20">
-                                                <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
-                                            </svg>
-                                        </div>
-                                        <ul class="submenu">
-                                            <li class="submenu__item">
-                                                <a href="{{ url_for('works') }}">Portfolio</a>
-                                            </li>
-                                            <li class="submenu__item">
-                                                <a href="{{ url_for('works_masonry') }}">Works masonry</a>
-                                            </li>
-                                        </ul>
+                                        <a class="main-menu__link btn btn-anim" href="{{ url_for('works') }}">
+                                            <span class="btn-caption">Works</span>
+                                        </a>
                                     </li>
                                     <li class="main-menu__item">
                                         <a class="main-menu__link btn btn-anim" href="{{ url_for('contact') }}">
@@ -295,6 +282,11 @@
                                     <li class="main-menu__item">
                                         <a class="main-menu__link btn btn-anim" href="{{ url_for('about') }}">
                                             <span class="btn-caption">About Me</span>
+                                        </a>
+                                    </li>
+                                    <li class="main-menu__item">
+                                        <a class="main-menu__link btn btn-anim" href="{{ url_for('experience') }}">
+                                            <span class="btn-caption">Experience</span>
                                         </a>
                                     </li>
                                     <li class="main-menu__item">
@@ -437,6 +429,11 @@
                             <li class="footer-nav__item anim-uni-in-up">
                                 <a href="{{ url_for('about') }}" class="footer-nav__link btn-anim">
                                     <span class="btn-caption">About me</span>
+                                </a>
+                            </li>
+                            <li class="footer-nav__item anim-uni-in-up">
+                                <a href="{{ url_for('experience') }}" class="footer-nav__link btn-anim">
+                                    <span class="btn-caption">Experience</span>
                                 </a>
                             </li>
                             <li class="footer-nav__item anim-uni-in-up">

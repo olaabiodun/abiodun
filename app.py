@@ -335,6 +335,14 @@ def project_details(project_id):
                          prev_project=prev_project,
                          next_project=next_project)
 
+@app.route('/experience')
+def experience():
+    return render_template('experience.html')
+
+@app.route('/cv-page')
+def cv_page():
+    return render_template('cv-print.html')
+
 @app.route('/faq')
 def faq():
     return render_template('faq.html')
